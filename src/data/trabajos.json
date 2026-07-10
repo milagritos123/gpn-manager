@@ -8,6 +8,7 @@
     "fecha": "07 de jul de 2026",
     "tp": "TP N°3: Modelado BPMN",
     "nota": 8,
+    "notaSugerida": 8,
     "categoria": "Muy Bueno",
     "estado": "Pendiente",
     "documento": "En el presente trabajo se desarrolla el modelado del proceso de gestión de compras de una empresa del rubro logístico, utilizando la notación BPMN 2.0. Se identifican los roles de solicitante, comprador, aprobador y proveedor.\n\nEl proceso comienza con la solicitud de compra, continúa con la evaluación de proveedores, la aprobación correspondiente y finaliza con la recepción del pedido. El diagrama incluye eventos de inicio, actividades, gateways exclusivos y paralelos, y eventos de fin.\n\nSe incorpora un subproceso para la evaluación de cotizaciones alternativas y se documenta el flujo de excepciones cuando una solicitud es rechazada por superar el presupuesto autorizado. La notación utilizada es consistente con los estándares BPMN 2.0 y se utilizan correctamente los elementos de pool y lanes.\n\nEl modelo fue validado con la herramienta Bizagi Modeler y exportado en formato .bpmn. Se adjunta también documentación explicativa que detalla las decisiones de diseño tomadas durante el proceso de modelado.",
@@ -23,6 +24,11 @@
       "Correcta utilización de eventos de inicio y fin.",
       "Subproceso bien estructurado con actividades claramente definidas.",
       "Documentación complementaria detallada y coherente con el modelo."
+    ],
+    "recomendaciones": [
+      "Revisar la notación de eventos de error en subprocesos según la especificación BPMN 2.0.",
+      "Agregar anotaciones de texto en los gateways para documentar las condiciones de cada flujo de salida.",
+      "Incluir el flujo de mensajes entre los pools utilizando elementos de mensaje en el diagrama."
     ]
   },
   {
@@ -34,6 +40,7 @@
     "fecha": "06 de jul de 2026",
     "tp": "TP N°3: Modelado BPMN",
     "nota": 9,
+    "notaSugerida": 9,
     "categoria": "Excelente",
     "estado": "Pendiente",
     "documento": "El presente trabajo aborda el modelado del proceso de atención al cliente en una empresa de telecomunicaciones. Se utilizó BPMN 2.0 para representar el flujo completo desde la recepción del reclamo hasta su resolución.\n\nSe identificaron tres pools principales: Cliente, Centro de Atención y Área Técnica. Cada pool contiene lanes que representan los distintos actores del proceso. El modelo incluye eventos de inicio de mensaje, tareas de usuario, tareas de servicio y eventos de temporizador.\n\nSe modeló el escalamiento de reclamos no resueltos dentro de un plazo de 48 horas mediante un evento de temporizador adjunto al borde de la tarea principal. Esto permite representar con precisión la lógica de negocio actual de la empresa.\n\nLa validación del modelo se realizó con Camunda Modeler, verificando la sintaxis BPMN y la coherencia del flujo. El trabajo incluye una memoria descriptiva de 8 páginas que justifica cada decisión de modelado.",
@@ -48,6 +55,10 @@
       "Validación formal con herramienta BPMN.",
       "Memoria descriptiva completa y de alta calidad.",
       "Modelo exportado correctamente en formato estándar."
+    ],
+    "recomendaciones": [
+      "Considerar el uso de gateway basado en eventos en lugar del exclusivo para los flujos de escalamiento.",
+      "Agregar un evento de señal para la notificación al cliente una vez resuelto el reclamo."
     ]
   },
   {
@@ -59,6 +70,7 @@
     "fecha": "05 de jul de 2026",
     "tp": "TP N°3: Modelado BPMN",
     "nota": 5,
+    "notaSugerida": 5,
     "categoria": "Regular",
     "estado": "Pendiente",
     "documento": "En este trabajo se intenta modelar el proceso de incorporación de nuevos empleados en una empresa de retail. Se representaron las actividades del área de Recursos Humanos y el área de Sistemas.\n\nEl diagrama incluye las tareas principales del proceso: recepción de la documentación, creación del legajo, alta en el sistema y entrega de equipamiento. Se utilizaron eventos de inicio y fin simples.\n\nSe intentó representar la aprobación del gerente de área mediante un gateway, aunque la lógica de las salidas no es completamente clara en el diagrama. El modelo fue creado con draw.io y exportado como imagen PNG.",
@@ -73,6 +85,13 @@
     "fortalezas": [
       "Las tareas principales del proceso están identificadas correctamente.",
       "El orden general del proceso es lógico y coherente con el enunciado."
+    ],
+    "recomendaciones": [
+      "Exportar el modelo como archivo .bpmn para permitir la validación formal con herramientas específicas.",
+      "Incorporar lanes dentro de un pool para separar claramente las responsabilidades de RRHH y Sistemas.",
+      "Documentar las condiciones de los gateways con anotaciones de texto.",
+      "Reemplazar la imagen estática por un modelo editable y ejecutable.",
+      "Revisar los conceptos de tareas de usuario, servicio y manual para aplicarlos correctamente."
     ]
   },
   {
@@ -84,6 +103,7 @@
     "fecha": "04 de jul de 2026",
     "tp": "TP N°2: Procesos As-Is",
     "nota": 7,
+    "notaSugerida": 7,
     "categoria": "Bueno",
     "estado": "Aceptado",
     "documento": "El presente trabajo describe y modela el proceso As-Is de gestión de pedidos de una empresa de distribución de alimentos. Se realizó una entrevista con el responsable del área logística para recabar información sobre el proceso actual.\n\nEl proceso fue documentado mediante una descripción textual y luego modelado con BPMN 2.0. Se identificaron las principales ineficiencias del proceso actual, incluyendo demoras en la verificación de stock y falta de automatización en la generación de órdenes de compra.\n\nEl modelo As-Is sirve como línea base para la posterior propuesta de mejora del proceso (To-Be), que será abordada en el siguiente trabajo práctico.",
@@ -97,6 +117,11 @@
       "Clara identificación de ineficiencias del proceso actual.",
       "Modelo BPMN correcto en sus elementos fundamentales.",
       "Buena redacción del informe descriptivo."
+    ],
+    "recomendaciones": [
+      "Documentar la variante de pedidos urgentes como un flujo alternativo dentro del mismo modelo.",
+      "Agregar métricas de tiempo por actividad para enriquecer el análisis As-Is.",
+      "Detallar el criterio de decisión en el gateway de verificación de stock."
     ]
   },
   {
@@ -108,6 +133,7 @@
     "fecha": "03 de jul de 2026",
     "tp": "TP N°2: Procesos As-Is",
     "nota": 9,
+    "notaSugerida": 9,
     "categoria": "Excelente",
     "estado": "Aceptado",
     "documento": "Este trabajo documenta el proceso As-Is de gestión de reclamos de una empresa de servicios financieros. El relevamiento se realizó mediante entrevistas con tres empleados del área de atención al cliente y revisión de documentación interna.\n\nSe identificaron cuatro variantes principales del proceso según el tipo y la gravedad del reclamo. Cada variante fue modelada con BPMN 2.0, resultando en cuatro diagramas complementarios que cubren el espectro completo del proceso actual.\n\nEl análisis de ineficiencias es exhaustivo e incluye métricas de tiempo promedio por actividad, tasas de re-trabajo y cuellos de botella identificados. Estos datos serán la base del análisis cuantitativo para la propuesta de mejora.",
@@ -120,6 +146,10 @@
       "Cuatro modelos BPMN técnicamente correctos.",
       "Excelente estructura y redacción del informe.",
       "Uso de datos para fundamentar el análisis de ineficiencias."
+    ],
+    "recomendaciones": [
+      "Incorporar un diagrama de flujo de datos complementario para visualizar los sistemas involucrados.",
+      "Considerar agregar un análisis de valor agregado por actividad en el siguiente trabajo."
     ]
   },
   {
@@ -131,6 +161,7 @@
     "fecha": "02 de jul de 2026",
     "tp": "TP N°2: Procesos As-Is",
     "nota": 6,
+    "notaSugerida": 6,
     "categoria": "Bueno",
     "estado": "Pendiente",
     "documento": "El trabajo presenta la documentación del proceso As-Is de incorporación de proveedores en una empresa manufacturera. El relevamiento se realizó mediante observación directa del proceso y consulta con el área de compras.\n\nSe identificaron los actores principales: solicitante interno, área de compras y proveedor. El proceso fue modelado con BPMN 2.0 y se documentaron las principales etapas: solicitud de alta, validación de documentación, evaluación crediticia y aprobación final.\n\nSe detectaron ineficiencias relacionadas con el proceso manual de validación de documentación, que actualmente requiere la intervención de múltiples personas y genera demoras significativas.",
@@ -145,6 +176,12 @@
       "Identificación clara de los actores del proceso.",
       "Modelo BPMN funcional y correctamente estructurado.",
       "Clara identificación de la ineficiencia principal del proceso."
+    ],
+    "recomendaciones": [
+      "Modelar el flujo de excepción para documentación incompleta con un evento de error adjunto.",
+      "Incorporar tiempos estimados por actividad como anotaciones en el diagrama.",
+      "Especificar las reglas de negocio de la evaluación crediticia en una tabla de decisión adjunta.",
+      "Agregar un indicador de frecuencia para cuantificar el impacto de la ineficiencia detectada."
     ]
   },
   {
@@ -156,6 +193,7 @@
     "fecha": "01 de jul de 2026",
     "tp": "TP N°1: Introducción a BPM",
     "nota": 9,
+    "notaSugerida": 9,
     "categoria": "Excelente",
     "estado": "Aceptado",
     "documento": "El trabajo presenta un análisis conceptual de la Gestión de Procesos de Negocio (BPM) como disciplina, explorando sus fundamentos teóricos, metodologías principales y herramientas de soporte.\n\nSe analizan los ciclos de vida BPM propuestos por diferentes autores de referencia, comparando los enfoques de Dumas et al. (2018), Van der Aalst (2016) y Weske (2019). Se identifican los elementos comunes y las diferencias en la caracterización de cada fase del ciclo.\n\nEl trabajo incluye un análisis de casos de éxito en la implementación de BPM en empresas latinoamericanas, con foco en los factores críticos de éxito y los principales obstáculos encontrados durante la implementación.",
@@ -167,6 +205,10 @@
       "Excelente calidad de redacción y estructuración del trabajo.",
       "Bibliografía amplia y correctamente citada.",
       "Síntesis propia y reflexiones originales del estudiante."
+    ],
+    "recomendaciones": [
+      "Explorar en trabajos futuros la dimensión tecnológica del BPM con herramientas de proceso mining.",
+      "Profundizar el análisis de los factores de fracaso en implementaciones BPM para enriquecer la perspectiva crítica."
     ]
   },
   {
@@ -178,6 +220,7 @@
     "fecha": "30 de jun de 2026",
     "tp": "TP N°1: Introducción a BPM",
     "nota": 6,
+    "notaSugerida": 6,
     "categoria": "Bueno",
     "estado": "Pendiente",
     "documento": "Este trabajo presenta una introducción a la Gestión de Procesos de Negocio. Se describen los conceptos principales de BPM y su importancia en las organizaciones modernas.\n\nSe analizó el ciclo de vida BPM según el libro de texto de la materia y se describieron brevemente las herramientas más utilizadas en la industria. El trabajo concluye con una reflexión sobre la importancia de la mejora continua de procesos.",
@@ -191,6 +234,12 @@
       "Los conceptos básicos están correctamente presentados.",
       "Buena estructura y organización del trabajo.",
       "Reflexión final pertinente sobre mejora continua."
+    ],
+    "recomendaciones": [
+      "Ampliar la bibliografía incorporando al menos 3 fuentes adicionales además del libro de texto.",
+      "Incluir un caso de estudio real de implementación BPM para ilustrar los conceptos teóricos.",
+      "Profundizar la comparación entre metodologías BPM (Six Sigma, Lean, PDCA) con ejemplos concretos.",
+      "Desarrollar la sección de herramientas con capturas o ejemplos de uso real."
     ]
   }
 ]
