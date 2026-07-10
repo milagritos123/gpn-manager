@@ -1,0 +1,38 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+/* Category variants */
+.regular {
+  background-color: var(--color-regular-light);
+  color: var(--color-regular);
+}
+
+.bueno {
+  background-color: var(--color-bueno-light);
+  color: #B45309;
+}
+
+.muybueno {
+  background-color: var(--color-muybueno-light);
+  color: var(--color-primary);
+}
+
+.excelente {
+  background-color: var(--color-excelente-light);
+  color: #059669;
+}

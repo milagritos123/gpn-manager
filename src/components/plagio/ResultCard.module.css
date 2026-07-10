@@ -1,0 +1,150 @@
+/* Result card */
+.card {
+  border-radius: var(--radius-lg);
+  border: 1px solid;
+  overflow: hidden;
+  animation: fadeUp 0.3s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cardAlto {
+  background-color: #FEF2F2;
+  border-color: #FECACA;
+}
+
+.cardMedio {
+  background-color: #FFFBEB;
+  border-color: #FDE68A;
+}
+
+.cardBajo {
+  background-color: #ECFDF5;
+  border-color: #A7F3D0;
+}
+
+/* Top row */
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  gap: var(--space-4);
+}
+
+.leftGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+/* Circular percentage */
+.percentCircle {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.percentCircle svg {
+  transform: rotate(-90deg);
+}
+
+.percentText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
+.similarityLabel {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.riskBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.riskDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.fileInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* Alert */
+.alert {
+  margin: 0 var(--space-6) var(--space-4);
+  background-color: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+
+.alertMain {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 13px;
+  font-weight: 600;
+  color: #92400E;
+  margin-bottom: 4px;
+}
+
+.alertSub {
+  font-size: 11px;
+  color: #B45309;
+  margin-left: 22px;
+}
+
+/* Meta info */
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-4) var(--space-6) var(--space-5);
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.metaLabel {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.metaValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}

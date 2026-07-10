@@ -1,0 +1,118 @@
+[
+  {
+    "id": 1,
+    "archivo": "TFI_Gonzalez_Perez_2026.pdf",
+    "fecha": "04 de jul de 2026",
+    "autor": "María González Pérez",
+    "carrera": "Ing. Industrial",
+    "similitud": 78,
+    "riesgo": "Alto",
+    "estado": "Pendiente",
+    "fragmentos": [
+      {
+        "cita": "\"El proceso de gestión de compras se compone de varias etapas interconectadas que van desde la detección de la necesidad hasta la recepción del bien o servicio solicitado.\"",
+        "origen": "TFI: Optimización de procesos logísticos (2024)",
+        "autor_origen": "Juan Rodríguez",
+        "coincidencia": 92
+      },
+      {
+        "cita": "\"La evaluación de proveedores es un paso crítico que permite asegurar la calidad de los productos y servicios adquiridos, así como optimizar los costos asociados.\"",
+        "origen": "TFI: Gestión de compras en PyMEs (2023)",
+        "autor_origen": "Ana Martínez",
+        "coincidencia": 87
+      }
+    ],
+    "coincidencias": [
+      { "titulo": "TFI: Optimización de procesos logísticos", "anio": 2024, "autor": "Juan Rodríguez", "carrera": "Ing. Industrial", "similitud": 78 },
+      { "titulo": "TFI: Gestión de compras en PyMEs", "anio": 2023, "autor": "Ana Martínez", "carrera": "Lic. Administración", "similitud": 45 },
+      { "titulo": "TFI: Mejora continua en logística", "anio": 2022, "autor": "Lucía Fernández", "carrera": "Ing. Industrial", "similitud": 31 }
+    ]
+  },
+  {
+    "id": 2,
+    "archivo": "TFI_Rodriguez_Silva_2026.pdf",
+    "fecha": "02 de jul de 2026",
+    "autor": "Juan Carlos Rodríguez",
+    "carrera": "Lic. Administración",
+    "similitud": 45,
+    "riesgo": "Medio",
+    "estado": "Revisión",
+    "fragmentos": [
+      {
+        "cita": "\"La gestión de reclamos requiere un proceso estructurado que garantice la trazabilidad de cada caso y la satisfacción del cliente en el menor tiempo posible.\"",
+        "origen": "TFI: Atención al cliente en servicios financieros (2023)",
+        "autor_origen": "Carolina López",
+        "coincidencia": 67
+      }
+    ],
+    "coincidencias": [
+      { "titulo": "TFI: Atención al cliente en servicios financieros", "anio": 2023, "autor": "Carolina López", "carrera": "Lic. Administración", "similitud": 45 },
+      { "titulo": "TFI: Procesos de reclamos bancarios", "anio": 2022, "autor": "Martín Sosa", "carrera": "Ing. Industrial", "similitud": 28 }
+    ]
+  },
+  {
+    "id": 3,
+    "archivo": "TFI_Martinez_Lopez_2026.pdf",
+    "fecha": "27 de jun de 2026",
+    "autor": "Ana Lucía Martínez",
+    "carrera": "Ing. Industrial",
+    "similitud": 12,
+    "riesgo": "Bajo",
+    "estado": "Aprobado",
+    "fragmentos": [],
+    "coincidencias": [
+      { "titulo": "TFI: Gestión de inventarios industriales", "anio": 2024, "autor": "Pedro García", "carrera": "Ing. Industrial", "similitud": 12 }
+    ]
+  },
+  {
+    "id": 4,
+    "archivo": "TFI_Gomez_Ruiz_2026.pdf",
+    "fecha": "24 de jun de 2026",
+    "autor": "Pedro Felipe Gómez",
+    "carrera": "Ing. Sistemas",
+    "similitud": 23,
+    "riesgo": "Bajo",
+    "estado": "Aprobado",
+    "fragmentos": [
+      {
+        "cita": "\"Los sistemas ERP permiten integrar los procesos de una organización en una única plataforma, mejorando la visibilidad y el control operativo.\"",
+        "origen": "TFI: Implementación de ERP en PyMEs (2023)",
+        "autor_origen": "Valentina Torres",
+        "coincidencia": 41
+      }
+    ],
+    "coincidencias": [
+      { "titulo": "TFI: Implementación de ERP en PyMEs", "anio": 2023, "autor": "Valentina Torres", "carrera": "Ing. Sistemas", "similitud": 23 },
+      { "titulo": "TFI: Transformación digital en empresas", "anio": 2022, "autor": "Diego Ruiz", "carrera": "Lic. Administración", "similitud": 15 }
+    ]
+  },
+  {
+    "id": 5,
+    "archivo": "TFI_Silva_Torres_2026.pdf",
+    "fecha": "20 de jun de 2026",
+    "autor": "Carolina Silva Torres",
+    "carrera": "Lic. Administración",
+    "similitud": 67,
+    "riesgo": "Alto",
+    "estado": "Pendiente",
+    "fragmentos": [
+      {
+        "cita": "\"La mejora continua de procesos implica un ciclo iterativo de planificación, ejecución, evaluación y corrección, conocido como ciclo PDCA o ciclo de Deming.\"",
+        "origen": "TFI: Lean Management en empresas de servicio (2024)",
+        "autor_origen": "Roberto Méndez",
+        "coincidencia": 79
+      },
+      {
+        "cita": "\"El mapeo de flujo de valor permite identificar las actividades que agregan valor al proceso y aquellas que deben ser eliminadas para reducir desperdicios.\"",
+        "origen": "TFI: Value Stream Mapping aplicado (2023)",
+        "autor_origen": "Florencia Vega",
+        "coincidencia": 71
+      }
+    ],
+    "coincidencias": [
+      { "titulo": "TFI: Lean Management en empresas de servicio", "anio": 2024, "autor": "Roberto Méndez", "carrera": "Lic. Administración", "similitud": 67 },
+      { "titulo": "TFI: Value Stream Mapping aplicado", "anio": 2023, "autor": "Florencia Vega", "carrera": "Ing. Industrial", "similitud": 48 },
+      { "titulo": "TFI: Mejora de procesos administrativos", "anio": 2022, "autor": "Sergio Molina", "carrera": "Lic. Administración", "similitud": 33 }
+    ]
+  }
+]

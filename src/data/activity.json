@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "type": "correction",
+    "text": "TP N°3 de María González Pérez corregido por IA",
+    "time": "Hace 2 horas"
+  },
+  {
+    "id": 2,
+    "type": "alert",
+    "text": "TFI_Gonzalez_Perez_2026.pdf analizado — 78% similitud",
+    "time": "Hace 5 horas"
+  },
+  {
+    "id": 3,
+    "type": "accepted",
+    "text": "TP N°2 de Pedro Felipe Gómez aceptado",
+    "time": "Ayer"
+  },
+  {
+    "id": 4,
+    "type": "resource",
+    "text": "Recurso 'BPMN 2.0 - Guía Completa.pdf' indexado",
+    "time": "Hace 2 días"
+  },
+  {
+    "id": 5,
+    "type": "alert",
+    "text": "TFI_Silva_Torres_2026.pdf analizado — 67% similitud",
+    "time": "Hace 3 días"
+  }
+]
