@@ -1,0 +1,305 @@
+/* ── Two-column layout ── */
+.page {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg);
+  font-family: 'Inter', 'Outfit', sans-serif;
+}
+
+/* ── Left panel ── */
+.left {
+  width: 38%;
+  flex-shrink: 0;
+  background: linear-gradient(160deg, #4C1D95 0%, #7C3AED 60%, #6D28D9 100%);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-8) var(--space-8);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative blobs */
+.left::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+
+.left::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+
+/* Logo area */
+.logoArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  z-index: 1;
+}
+
+.logoIcon {
+  width: 46px;
+  height: 46px;
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.2);
+  margin-bottom: var(--space-2);
+  backdrop-filter: blur(4px);
+}
+
+.logoName {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.3px;
+}
+
+.logoTagline {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+}
+
+/* Center quote */
+.quoteArea {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.quoteText {
+  font-size: 24px;
+  font-weight: 700;
+  font-style: italic;
+  color: white;
+  text-align: center;
+  line-height: 1.45;
+  letter-spacing: -0.3px;
+  position: relative;
+  padding: 0 var(--space-6);
+}
+
+.quoteText::before {
+  content: '\201C';
+  font-size: 72px;
+  color: rgba(255,255,255,0.2);
+  position: absolute;
+  top: -24px;
+  left: 0;
+  line-height: 1;
+  font-style: normal;
+}
+
+.quoteText::after {
+  content: '\201D';
+  font-size: 72px;
+  color: rgba(255,255,255,0.2);
+  position: absolute;
+  bottom: -48px;
+  right: 0;
+  line-height: 1;
+  font-style: normal;
+}
+
+/* Bottom decorative icons */
+.decorIcons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  opacity: 0.25;
+  z-index: 1;
+  padding-bottom: var(--space-2);
+}
+
+/* ── Right panel ── */
+.right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-8);
+  background: var(--color-surface);
+}
+
+.formCard {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.formTitle {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: -0.5px;
+}
+
+.formSubtitle {
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  margin-top: -var(--space-2);
+}
+
+/* Field groups */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.fieldLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.fieldRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgotLink {
+  font-size: 12.5px;
+  color: var(--color-primary);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.forgotLink:hover { text-decoration: underline; }
+
+/* Input with icon */
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 13px;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.input {
+  width: 100%;
+  padding: 11px 13px 11px 38px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  background: var(--color-bg);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input::placeholder { color: var(--color-text-muted); }
+
+.input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  background: var(--color-surface);
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.eyeBtn:hover { color: var(--color-text-secondary); }
+
+/* Checkbox row */
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.checkRow input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: #2563EB;
+  cursor: pointer;
+}
+
+.checkLabel {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+/* Submit button */
+.submitBtn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #9333EA 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s, box-shadow 0.15s;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+}
+
+.submitBtn:hover {
+  background: linear-gradient(135deg, #6D28D9 0%, #7C3AED 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+}
+
+.submitBtn:active { transform: translateY(0); }
+
+/* Error message */
+.errorMsg {
+  font-size: 12.5px;
+  color: #EF4444;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  text-align: center;
+}

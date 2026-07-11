@@ -1,12 +1,17 @@
+import DashboardHeader from '../components/dashboard/DashboardHeader'
 import MetricCard from '../components/dashboard/MetricCard'
 import BarChart from '../components/dashboard/BarChart'
 import ActivityPanel from '../components/dashboard/ActivityPanel'
 import metricsData from '../data/metrics.json'
+import userData from '../data/user.json'
 import styles from './Dashboard.module.css'
 
 function Dashboard() {
   return (
     <div className={styles.page}>
+      {/* Welcome header */}
+      <DashboardHeader user={userData} />
+
       {/* Metric Cards */}
       <div className={styles.metricsGrid}>
         {metricsData.map((metric) => (
