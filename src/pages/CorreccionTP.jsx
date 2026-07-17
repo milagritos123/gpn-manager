@@ -2,15 +2,10 @@ import { useState, useMemo } from 'react'
 import FilterBar from '../components/correccion/FilterBar'
 import TPTable from '../components/correccion/TPTable'
 import TPDrawer from '../components/correccion/TPDrawer'
-import trabajosData from '../data/trabajos.json'
+import trabajosData from '../data/trabajosGrupales.json'
 import styles from './CorreccionTP.module.css'
 
-const INITIAL_FILTERS = {
-  search: '',
-  comision: '',
-  categoria: '',
-  estado: '',
-}
+const INITIAL_FILTERS = { search: '', categoria: '', estado: '' }
 
 function CorreccionTP() {
   const [filters, setFilters] = useState(INITIAL_FILTERS)
@@ -20,18 +15,13 @@ function CorreccionTP() {
     setFilters((prev) => ({ ...prev, [key]: value }))
   }
 
-  const handleClearFilters = () => {
-    setFilters(INITIAL_FILTERS)
-  }
-
   const filteredTrabajos = useMemo(() => {
     return trabajosData.filter((tp) => {
+      const q = filters.search.toLowerCase()
       const matchesSearch =
-        filters.search === '' ||
-        tp.nombre.toLowerCase().includes(filters.search.toLowerCase())
-
-      const matchesComision =
-        filters.comision === '' || tp.comision === filters.comision
+        q === '' ||
+        tp.grupoLabel.toLowerCase().includes(q) ||
+        tp.integrantes.some((m) => m.toLowerCase().includes(q))
 
       const matchesCategoria =
         filters.categoria === '' || tp.categoria === filters.categoria
@@ -39,13 +29,12 @@ function CorreccionTP() {
       const matchesEstado =
         filters.estado === '' || tp.estado === filters.estado
 
-      return matchesSearch && matchesComision && matchesCategoria && matchesEstado
+      return matchesSearch && matchesCategoria && matchesEstado
     })
   }, [filters])
 
   return (
     <div className={styles.page}>
-      {/* Page header */}
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Corrección Inteligente de Trabajos Prácticos</h1>
         <p className={styles.pageSubtitle}>
@@ -53,25 +42,17 @@ function CorreccionTP() {
         </p>
       </div>
 
-      {/* Filters */}
       <FilterBar
         filters={filters}
         onFilterChange={handleFilterChange}
-        onClear={handleClearFilters}
+        onClear={() => setFilters(INITIAL_FILTERS)}
+        searchPlaceholder="Buscar grupo o integrante..."
       />
 
-      {/* Table */}
-      <TPTable
-        trabajos={filteredTrabajos}
-        onVerDetalle={setSelectedTP}
-      />
+      <TPTable trabajos={filteredTrabajos} onVerDetalle={setSelectedTP} />
 
-      {/* Drawer */}
       {selectedTP && (
-        <TPDrawer
-          tp={selectedTP}
-          onClose={() => setSelectedTP(null)}
-        />
+        <TPDrawer tp={selectedTP} onClose={() => setSelectedTP(null)} />
       )}
     </div>
   )

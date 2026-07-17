@@ -1,8 +1,8 @@
 [
   {
     "id": 1,
-    "nombre": "María González Pérez",
-    "iniciales": "MG",
+    "nombre": "Silvia Melisa Albornoz",
+    "iniciales": "MA",
     "avatarColor": "#7C3AED",
     "comision": "A - Turno Noche",
     "fecha": "07 de jul de 2026",
@@ -33,8 +33,8 @@
   },
   {
     "id": 2,
-    "nombre": "Juan Carlos Rodríguez",
-    "iniciales": "JC",
+    "nombre": "César Tomás Delgado",
+    "iniciales": "CD",
     "avatarColor": "#2563EB",
     "comision": "B - Turno Mañana",
     "fecha": "06 de jul de 2026",
@@ -63,8 +63,8 @@
   },
   {
     "id": 3,
-    "nombre": "Ana Lucía Martínez",
-    "iniciales": "AL",
+    "nombre": "Corina Jimenez",
+    "iniciales": "CJ",
     "avatarColor": "#059669",
     "comision": "C - Turno Tarde",
     "fecha": "05 de jul de 2026",
@@ -96,8 +96,8 @@
   },
   {
     "id": 4,
-    "nombre": "Pedro Felipe Gómez",
-    "iniciales": "PF",
+    "nombre": "Agustina Bazán",
+    "iniciales": "AB",
     "avatarColor": "#D97706",
     "comision": "A - Turno Noche",
     "fecha": "04 de jul de 2026",
@@ -126,8 +126,8 @@
   },
   {
     "id": 5,
-    "nombre": "Carolina Silva Romero",
-    "iniciales": "CS",
+    "nombre": "Mauro Nahuel Armas",
+    "iniciales": "MA",
     "avatarColor": "#0891B2",
     "comision": "B - Turno Mañana",
     "fecha": "03 de jul de 2026",
@@ -154,8 +154,8 @@
   },
   {
     "id": 6,
-    "nombre": "Diego Hernán López",
-    "iniciales": "DH",
+    "nombre": "Luciano Agustin Donnet",
+    "iniciales": "DL",
     "avatarColor": "#7C3AED",
     "comision": "C - Turno Tarde",
     "fecha": "02 de jul de 2026",
@@ -186,8 +186,8 @@
   },
   {
     "id": 7,
-    "nombre": "Valentina Torres Sosa",
-    "iniciales": "VT",
+    "nombre": "Octavio Joaquin Lopéz",
+    "iniciales": "OL",
     "avatarColor": "#BE185D",
     "comision": "A - Turno Noche",
     "fecha": "01 de jul de 2026",
@@ -213,8 +213,8 @@
   },
   {
     "id": 8,
-    "nombre": "Martín Alejandro Ruiz",
-    "iniciales": "MR",
+    "nombre": "Iván Alejandro Ochoa",
+    "iniciales": "IO",
     "avatarColor": "#0369A1",
     "comision": "B - Turno Mañana",
     "fecha": "30 de jun de 2026",

@@ -5,6 +5,7 @@ import Layout from './components/layout/Layout'
 import Dashboard from './pages/Dashboard'
 import CorreccionTP from './pages/CorreccionTP'
 import DeteccionPlagio from './pages/DeteccionPlagio'
+import GestionAlumnos from './pages/GestionAlumnos'
 import AsistenteInteligente from './pages/AsistenteInteligente'
 
 // Pages that manage their own full height (no inner scroll needed)
@@ -18,6 +19,7 @@ function AppShell() {
       case 'dashboard':  return <Dashboard />
       case 'correccion': return <CorreccionTP />
       case 'plagio':     return <DeteccionPlagio />
+      case 'alumnos':    return <GestionAlumnos />
       case 'asistente':  return <AsistenteInteligente />
       default:           return <Dashboard />
     }

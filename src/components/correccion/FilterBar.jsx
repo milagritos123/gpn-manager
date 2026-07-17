@@ -1,6 +1,6 @@
 import styles from './FilterBar.module.css'
 
-function FilterBar({ filters, onFilterChange, onClear }) {
+function FilterBar({ filters, onFilterChange, onClear, searchPlaceholder = 'Buscar...' }) {
   return (
     <div className={styles.filterSection}>
       <div className={styles.filterTitle}>
@@ -29,24 +29,11 @@ function FilterBar({ filters, onFilterChange, onClear }) {
             id="filter-search"
             type="text"
             className={styles.searchInput}
-            placeholder="Buscar alumno..."
+            placeholder={searchPlaceholder}
             value={filters.search}
             onChange={(e) => onFilterChange('search', e.target.value)}
           />
         </div>
-
-        {/* Comisión */}
-        <select
-          id="filter-comision"
-          className={styles.select}
-          value={filters.comision}
-          onChange={(e) => onFilterChange('comision', e.target.value)}
-        >
-          <option value="">Todas las comisiones</option>
-          <option value="A - Turno Noche">A - Turno Noche</option>
-          <option value="B - Turno Mañana">B - Turno Mañana</option>
-          <option value="C - Turno Tarde">C - Turno Tarde</option>
-        </select>
 
         {/* Categoría */}
         <select

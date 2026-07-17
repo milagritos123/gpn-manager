@@ -49,29 +49,48 @@
   white-space: nowrap;
 }
 
-/* Student cell */
-.studentCell {
+/* Group cell */
+.groupCell {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-3);
 }
 
-.avatar {
-  width: 32px;
-  height: 32px;
+.groupBadge {
+  width: 28px;
+  height: 28px;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
   color: white;
   flex-shrink: 0;
+  margin-top: 1px;
 }
 
-.studentName {
-  font-weight: 600;
+.groupInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.groupName {
+  font-weight: 700;
   color: var(--color-text-primary);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.groupMembers {
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
 }
 
 /* Nota */

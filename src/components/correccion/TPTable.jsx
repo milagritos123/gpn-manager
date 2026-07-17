@@ -2,14 +2,24 @@ import CategoryBadge from './CategoryBadge'
 import StatusBadge from './StatusBadge'
 import styles from './TPTable.module.css'
 
+const GROUP_COLORS = ['#7C3AED', '#2563EB', '#059669', '#D97706', '#BE185D']
+
+function GroupBadge({ num }) {
+  const color = GROUP_COLORS[(num - 1) % GROUP_COLORS.length]
+  return (
+    <span className={styles.groupBadge} style={{ backgroundColor: color }}>
+      {num}
+    </span>
+  )
+}
+
 function TPTable({ trabajos, onVerDetalle }) {
   return (
     <div className={styles.tableWrapper}>
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
-            <th className={styles.th}>Estudiante</th>
-            <th className={styles.th}>Comisión</th>
+            <th className={styles.th}>Grupo</th>
             <th className={styles.th}>Fecha</th>
             <th className={styles.th}>Trabajo Práctico</th>
             <th className={styles.th}>Nota</th>
@@ -21,7 +31,7 @@ function TPTable({ trabajos, onVerDetalle }) {
         <tbody>
           {trabajos.length === 0 ? (
             <tr className={styles.emptyRow}>
-              <td colSpan={8}>No se encontraron resultados para los filtros aplicados.</td>
+              <td colSpan={7}>No se encontraron resultados para los filtros aplicados.</td>
             </tr>
           ) : (
             trabajos.map((tp) => (
@@ -31,21 +41,18 @@ function TPTable({ trabajos, onVerDetalle }) {
                 onClick={() => onVerDetalle(tp)}
                 style={{ cursor: 'pointer' }}
               >
-                {/* Estudiante */}
+                {/* Grupo */}
                 <td className={styles.td}>
-                  <div className={styles.studentCell}>
-                    <div
-                      className={styles.avatar}
-                      style={{ backgroundColor: tp.avatarColor }}
-                    >
-                      {tp.iniciales}
+                  <div className={styles.groupCell}>
+                    <GroupBadge num={tp.grupoNum} />
+                    <div className={styles.groupInfo}>
+                      <span className={styles.groupName}>{tp.grupoLabel}</span>
+                      <span className={styles.groupMembers}>
+                        {tp.integrantes.join(' · ')}
+                      </span>
                     </div>
-                    <span className={styles.studentName}>{tp.nombre}</span>
                   </div>
                 </td>
-
-                {/* Comisión */}
-                <td className={styles.td}>{tp.comision}</td>
 
                 {/* Fecha */}
                 <td className={styles.td}>{tp.fecha}</td>

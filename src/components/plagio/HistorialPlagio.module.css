@@ -108,6 +108,7 @@
 .estadoPendiente { background: var(--color-border-light); color: var(--color-text-secondary); }
 .estadoRevision  { background: #FFFBEB; color: #B45309; }
 .estadoAprobado  { background: #ECFDF5; color: #059669; }
+.estadoRechazado { background: #FEF2F2; color: #DC2626; }
 
 /* View btn */
 .viewBtn {

@@ -10,6 +10,7 @@ const ESTADO_CFG = {
   Pendiente: { cls: styles.estadoPendiente, icon: '⏱' },
   Revisión:  { cls: styles.estadoRevision,  icon: '⚠' },
   Aprobado:  { cls: styles.estadoAprobado,  icon: '✓' },
+  Rechazado: { cls: styles.estadoRechazado, icon: '✕' },
 }
 
 function HistorialPlagio({ historial, onVer }) {
@@ -24,8 +25,8 @@ function HistorialPlagio({ historial, onVer }) {
           <tr>
             <th className={styles.th}>Documento</th>
             <th className={styles.th}>Fecha</th>
-            <th className={styles.th}>Autor</th>
-            <th className={styles.th}>Carrera</th>
+            <th className={styles.th}>Grupo</th>
+            <th className={styles.th}>Año</th>
             <th className={styles.th}>Similitud</th>
             <th className={styles.th}>Riesgo</th>
             <th className={styles.th}>Estado</th>
@@ -48,8 +49,8 @@ function HistorialPlagio({ historial, onVer }) {
                   </div>
                 </td>
                 <td className={styles.td}>{item.fecha}</td>
-                <td className={styles.td}>{item.autor}</td>
-                <td className={styles.td}>{item.carrera}</td>
+                <td className={styles.td}>{item.grupo}</td>
+                <td className={styles.td}>{item.anio}</td>
                 <td className={styles.td}>
                   <span className={risk.simCls}>{item.similitud}%</span>
                 </td>

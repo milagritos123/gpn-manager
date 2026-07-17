@@ -1,0 +1,209 @@
+/* Page */
+.page {
+  padding: var(--space-6) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.pageHeader { display: flex; flex-direction: column; gap: var(--space-1); }
+.pageTitle { font-size: 24px; font-weight: 800; color: var(--color-text-primary); letter-spacing: -0.4px; }
+.pageSubtitle { font-size: 13.5px; color: var(--color-text-secondary); }
+
+/* Filter bar */
+.filterSection {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-sm);
+}
+
+.filterTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.searchInput:focus { border-color: var(--color-primary); }
+.searchInput::placeholder { color: var(--color-text-muted); }
+
+.select {
+  padding: 9px 32px 9px 12px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  outline: none;
+  cursor: pointer;
+  appearance: auto;
+  min-width: 160px;
+}
+
+.select:focus { border-color: var(--color-primary); }
+
+.clearBtn {
+  padding: 9px var(--space-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--color-text-secondary);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.clearBtn:hover { background-color: var(--color-bg); }
+
+/* Table */
+.tableWrapper {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.table { width: 100%; border-collapse: collapse; }
+
+.thead {
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.th {
+  padding: 12px var(--space-4);
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.tr {
+  border-bottom: 1px solid var(--color-border-light);
+  transition: background-color 0.12s;
+}
+
+.tr:last-child { border-bottom: none; }
+.tr:hover { background-color: var(--color-primary-lighter); }
+
+.td {
+  padding: 14px var(--space-4);
+  font-size: 13px;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+/* Student cell */
+.studentCell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.studentName { font-weight: 600; }
+
+/* Estado badges */
+.estadoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.estadoActivo    { background: #ECFDF5; color: #059669; }
+.estadoEnRiesgo  { background: #FFFBEB; color: #B45309; }
+.estadoIrregular { background: #FEF2F2; color: #DC2626; }
+
+/* View btn */
+.viewBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+  background: none;
+  border: none;
+}
+
+.viewBtn:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* Empty row */
+.emptyRow td {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: 13px;
+}

@@ -1,0 +1,226 @@
+[
+  {
+    "id": 1,
+    "nombre": "María González Pérez",
+    "iniciales": "MG",
+    "avatarColor": "#7C3AED",
+    "legajo": "FAI-1023",
+    "grupo": "Grupo 1",
+    "grupoNum": 1,
+    "tpEntregados": 3,
+    "estado": "Activo",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 8, "categoria": "Muy Bueno", "estado": "Pendiente", "fecha": "07 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 7, "categoria": "Bueno", "estado": "Aceptado", "fecha": "04 de jul de 2026" },
+      { "id": 3, "tp": "TP N°1: Introducción a BPM", "nota": 8, "categoria": "Muy Bueno", "estado": "Aceptado", "fecha": "01 de jul de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  },
+  {
+    "id": 2,
+    "nombre": "Pedro Felipe Gómez",
+    "iniciales": "PF",
+    "avatarColor": "#D97706",
+    "legajo": "FAI-1045",
+    "grupo": "Grupo 1",
+    "grupoNum": 1,
+    "tpEntregados": 3,
+    "estado": "Activo",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 8, "categoria": "Muy Bueno", "estado": "Pendiente", "fecha": "07 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 7, "categoria": "Bueno", "estado": "Aceptado", "fecha": "04 de jul de 2026" },
+      { "id": 3, "tp": "TP N°1: Introducción a BPM", "nota": 8, "categoria": "Muy Bueno", "estado": "Aceptado", "fecha": "01 de jul de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  },
+  {
+    "id": 3,
+    "nombre": "Valentina Ruiz Díaz",
+    "iniciales": "VR",
+    "avatarColor": "#BE185D",
+    "legajo": "FAI-1078",
+    "grupo": "Grupo 1",
+    "grupoNum": 1,
+    "tpEntregados": 3,
+    "estado": "Activo",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 8, "categoria": "Muy Bueno", "estado": "Pendiente", "fecha": "07 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 7, "categoria": "Bueno", "estado": "Aceptado", "fecha": "04 de jul de 2026" },
+      { "id": 3, "tp": "TP N°1: Introducción a BPM", "nota": 8, "categoria": "Muy Bueno", "estado": "Aceptado", "fecha": "01 de jul de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  },
+  {
+    "id": 4,
+    "nombre": "Lucía Fernández Ríos",
+    "iniciales": "LF",
+    "avatarColor": "#059669",
+    "legajo": "FAI-1089",
+    "grupo": "Grupo 1",
+    "grupoNum": 1,
+    "tpEntregados": 3,
+    "estado": "Activo",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 8, "categoria": "Muy Bueno", "estado": "Pendiente", "fecha": "07 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 7, "categoria": "Bueno", "estado": "Aceptado", "fecha": "04 de jul de 2026" },
+      { "id": 3, "tp": "TP N°1: Introducción a BPM", "nota": 8, "categoria": "Muy Bueno", "estado": "Aceptado", "fecha": "01 de jul de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  },
+  {
+    "id": 5,
+    "nombre": "Juan Carlos Rodríguez",
+    "iniciales": "JC",
+    "avatarColor": "#2563EB",
+    "legajo": "FAI-1101",
+    "grupo": "Grupo 2",
+    "grupoNum": 2,
+    "tpEntregados": 3,
+    "estado": "En riesgo",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 9, "categoria": "Excelente", "estado": "Pendiente", "fecha": "06 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 9, "categoria": "Excelente", "estado": "Aceptado", "fecha": "03 de jul de 2026" },
+      { "id": 3, "tp": "TP N°1: Introducción a BPM", "nota": 4, "categoria": "Regular", "estado": "Rechazado", "fecha": "30 de jun de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": "El grupo presentó dificultades en el primer TP. Requiere seguimiento."
+  },
+  {
+    "id": 6,
+    "nombre": "Carolina Silva Romero",
+    "iniciales": "CS",
+    "avatarColor": "#0891B2",
+    "legajo": "FAI-1112",
+    "grupo": "Grupo 2",
+    "grupoNum": 2,
+    "tpEntregados": 3,
+    "estado": "En riesgo",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 9, "categoria": "Excelente", "estado": "Pendiente", "fecha": "06 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 9, "categoria": "Excelente", "estado": "Aceptado", "fecha": "03 de jul de 2026" },
+      { "id": 3, "tp": "TP N°1: Introducción a BPM", "nota": 4, "categoria": "Regular", "estado": "Rechazado", "fecha": "30 de jun de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  },
+  {
+    "id": 7,
+    "nombre": "Fernando Torres Vargas",
+    "iniciales": "FT",
+    "avatarColor": "#7C3AED",
+    "legajo": "FAI-1134",
+    "grupo": "Grupo 2",
+    "grupoNum": 2,
+    "tpEntregados": 3,
+    "estado": "En riesgo",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 9, "categoria": "Excelente", "estado": "Pendiente", "fecha": "06 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 9, "categoria": "Excelente", "estado": "Aceptado", "fecha": "03 de jul de 2026" },
+      { "id": 3, "tp": "TP N°1: Introducción a BPM", "nota": 4, "categoria": "Regular", "estado": "Rechazado", "fecha": "30 de jun de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  },
+  {
+    "id": 8,
+    "nombre": "Roberto Méndez Soto",
+    "iniciales": "RM",
+    "avatarColor": "#0369A1",
+    "legajo": "FAI-1145",
+    "grupo": "Grupo 2",
+    "grupoNum": 2,
+    "tpEntregados": 3,
+    "estado": "En riesgo",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 9, "categoria": "Excelente", "estado": "Pendiente", "fecha": "06 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 9, "categoria": "Excelente", "estado": "Aceptado", "fecha": "03 de jul de 2026" },
+      { "id": 3, "tp": "TP N°1: Introducción a BPM", "nota": 4, "categoria": "Regular", "estado": "Rechazado", "fecha": "30 de jun de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  },
+  {
+    "id": 9,
+    "nombre": "Ana Lucía Martínez",
+    "iniciales": "AL",
+    "avatarColor": "#059669",
+    "legajo": "FAI-1156",
+    "grupo": "Grupo 3",
+    "grupoNum": 3,
+    "tpEntregados": 2,
+    "estado": "Irregular",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 5, "categoria": "Regular", "estado": "Pendiente", "fecha": "05 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 6, "categoria": "Bueno", "estado": "Pendiente", "fecha": "02 de jul de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": "No entregó TP N°1. Situación irregular que requiere atención urgente."
+  },
+  {
+    "id": 10,
+    "nombre": "Diego Hernán López",
+    "iniciales": "DH",
+    "avatarColor": "#7C3AED",
+    "legajo": "FAI-1167",
+    "grupo": "Grupo 3",
+    "grupoNum": 3,
+    "tpEntregados": 2,
+    "estado": "Irregular",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 5, "categoria": "Regular", "estado": "Pendiente", "fecha": "05 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 6, "categoria": "Bueno", "estado": "Pendiente", "fecha": "02 de jul de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": "No entregó TP N°1."
+  },
+  {
+    "id": 11,
+    "nombre": "Sofía Castro Lima",
+    "iniciales": "SC",
+    "avatarColor": "#BE185D",
+    "legajo": "FAI-1178",
+    "grupo": "Grupo 3",
+    "grupoNum": 3,
+    "tpEntregados": 2,
+    "estado": "Irregular",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 5, "categoria": "Regular", "estado": "Pendiente", "fecha": "05 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 6, "categoria": "Bueno", "estado": "Pendiente", "fecha": "02 de jul de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  },
+  {
+    "id": 12,
+    "nombre": "Martín Vega Ortiz",
+    "iniciales": "MV",
+    "avatarColor": "#D97706",
+    "legajo": "FAI-1189",
+    "grupo": "Grupo 3",
+    "grupoNum": 3,
+    "tpEntregados": 2,
+    "estado": "Irregular",
+    "historialTPs": [
+      { "id": 1, "tp": "TP N°3: Modelado BPMN", "nota": 5, "categoria": "Regular", "estado": "Pendiente", "fecha": "05 de jul de 2026" },
+      { "id": 2, "tp": "TP N°2: Procesos As-Is", "nota": 6, "categoria": "Bueno", "estado": "Pendiente", "fecha": "02 de jul de 2026" }
+    ],
+    "notaTFI": null,
+    "conceptoExposicion": null,
+    "observaciones": ""
+  }
+]
