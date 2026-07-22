@@ -19,12 +19,12 @@
       {
         "cita": "El modelo BPMN 2.0 ofrece una notación estandarizada que facilita la comunicación entre equipos técnicos y de negocio.",
         "origen": "TFI: Gestión documental en organismos públicos (2022)",
-        "porcentaje": 33
+        "porcentaje": 38
       }
     ],
     "coincidencias": [
-      { "titulo": "TFI: Rediseño de procesos administrativos", "anio": 2023, "autor": "Pedro Gómez", "similitud": 45 },
-      { "titulo": "TFI: Automatización de gestión documental", "anio": 2021, "autor": "María López", "similitud": 28 }
+      { "titulo": "TFI: Rediseño de procesos administrativos", "grupo": "Grupo 4", "anioCursada": 2023, "similitud": 45 },
+      { "titulo": "TFI: Automatización de gestión documental",  "grupo": "Grupo 2", "anioCursada": 2021, "similitud": 28 }
     ]
   },
   {
@@ -46,8 +46,8 @@
       }
     ],
     "coincidencias": [
-      { "titulo": "TFI: Implementación BPM en PYMES", "anio": 2022, "autor": "Laura Torres", "similitud": 38 },
-      { "titulo": "TFI: Mejora continua de procesos", "anio": 2021, "autor": "Carlos Ruiz", "similitud": 22 }
+      { "titulo": "TFI: Implementación BPM en PYMES", "grupo": "Grupo 3", "anioCursada": 2022, "similitud": 38 },
+      { "titulo": "TFI: Mejora continua de procesos",  "grupo": "Grupo 1", "anioCursada": 2021, "similitud": 22 }
     ]
   },
   {
@@ -69,7 +69,7 @@
       }
     ],
     "coincidencias": [
-      { "titulo": "TFI: Análisis de cadena de valor en retail", "anio": 2020, "autor": "Roberto Sánchez", "similitud": 12 }
+      { "titulo": "TFI: Análisis de cadena de valor en retail", "grupo": "Grupo 5", "anioCursada": 2020, "similitud": 12 }
     ]
   },
   {
@@ -91,7 +91,7 @@
       }
     ],
     "coincidencias": [
-      { "titulo": "TFI: Implementación de RPA", "anio": 2019, "autor": "Sofía Herrera", "similitud": 23 }
+      { "titulo": "TFI: Implementación de RPA", "grupo": "Grupo 3", "anioCursada": 2019, "similitud": 23 }
     ]
   },
   {
@@ -113,8 +113,8 @@
       }
     ],
     "coincidencias": [
-      { "titulo": "TFI: Cultura organizacional y BPM", "anio": 2022, "autor": "Diego Ramírez", "similitud": 58 },
-      { "titulo": "TFI: Change management en procesos", "anio": 2021, "autor": "Ana Gutiérrez", "similitud": 35 }
+      { "titulo": "TFI: Cultura organizacional y BPM", "grupo": "Grupo 4", "anioCursada": 2022, "similitud": 58 },
+      { "titulo": "TFI: Change management en procesos",  "grupo": "Grupo 2", "anioCursada": 2021, "similitud": 35 }
     ]
   }
 ]

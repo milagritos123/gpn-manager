@@ -12,7 +12,7 @@ function CirclePercent({ value, color, trackColor }) {
   const dash = (value / 100) * circ
   return (
     <div className={styles.percentCircle}>
-      <svg width="80" height="80" viewBox="0 0 80 80">
+      <svg width="80" height="80" viewBox="0 0 80 80" style={{ display: 'block' }}>
         <circle cx="40" cy="40" r={r} fill="none" stroke={trackColor} strokeWidth="7" />
         <circle
           cx="40" cy="40" r={r}
@@ -21,6 +21,7 @@ function CirclePercent({ value, color, trackColor }) {
           strokeWidth="7"
           strokeDasharray={`${dash} ${circ}`}
           strokeLinecap="round"
+          style={{ transform: 'rotate(-90deg)', transformOrigin: '40px 40px' }}
         />
       </svg>
       <span className={styles.percentText}>{value}%</span>
@@ -33,7 +34,8 @@ function ResultCard({ analisis }) {
 
   return (
     <div className={`${styles.card} ${cfg.cardCls}`}>
-      {/* Top row: circle + info + filename */}
+
+      {/* Top row: circle + labels + filename */}
       <div className={styles.topRow}>
         <div className={styles.leftGroup}>
           <CirclePercent value={analisis.similitud} color={cfg.color} trackColor={cfg.trackColor} />
@@ -54,7 +56,7 @@ function ResultCard({ analisis }) {
         </div>
       </div>
 
-      {/* Alert */}
+      {/* Alert — only for Alto / Medio */}
       {analisis.riesgo !== 'Bajo' && (
         <div className={styles.alert}>
           <div className={styles.alertMain}>
@@ -71,8 +73,9 @@ function ResultCard({ analisis }) {
         </div>
       )}
 
-      {/* Meta */}
+      {/* Meta row — Autor · Grupo · Año de cursada · Fecha */}
       <div className={styles.metaRow}>
+        {/* Autor */}
         <div className={styles.metaItem}>
           <span className={styles.metaLabel}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -83,16 +86,22 @@ function ResultCard({ analisis }) {
           </span>
           <span className={styles.metaValue}>{analisis.autor}</span>
         </div>
+
+        {/* Grupo */}
         <div className={styles.metaItem}>
           <span className={styles.metaLabel}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-              <path d="M6 12v5c3 3 9 3 12 0v-5" />
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
-            Carrera
+            Grupo
           </span>
-          <span className={styles.metaValue}>{analisis.carrera}</span>
+          <span className={styles.metaValue}>{analisis.grupo}</span>
         </div>
+
+        {/* Año de cursada */}
         <div className={styles.metaItem}>
           <span className={styles.metaLabel}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -100,6 +109,18 @@ function ResultCard({ analisis }) {
               <line x1="16" y1="2" x2="16" y2="6" />
               <line x1="8" y1="2" x2="8" y2="6" />
               <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Año de cursada
+          </span>
+          <span className={styles.metaValue}>{analisis.anio}</span>
+        </div>
+
+        {/* Fecha de análisis */}
+        <div className={styles.metaItem}>
+          <span className={styles.metaLabel}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
             Fecha de análisis
           </span>

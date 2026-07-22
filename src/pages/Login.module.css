@@ -49,17 +49,12 @@
   z-index: 1;
 }
 
-.logoIcon {
-  width: 46px;
-  height: 46px;
-  background: rgba(255,255,255,0.15);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255,255,255,0.2);
+.logoImg {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  object-fit: cover;
   margin-bottom: var(--space-2);
-  backdrop-filter: blur(4px);
 }
 
 .logoName {

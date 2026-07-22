@@ -65,12 +65,11 @@ function Sidebar({ activePage, onNavigate }) {
     <aside className={styles.sidebar}>
       {/* Logo */}
       <div className={styles.logo}>
-        <div className={styles.logoIcon}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-            <path d="M6 12v5c3 3 9 3 12 0v-5" />
-          </svg>
-        </div>
+        <img
+          src="/logo.png"
+          alt="GPN Manager logo"
+          className={styles.logoImg}
+        />
         <div className={styles.logoText}>
           <span className={styles.logoTitle}>GPN Manager</span>
           <span className={styles.logoSubtitle}>Gestión de Procesos</span>

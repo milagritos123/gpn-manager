@@ -1,56 +1,44 @@
-/* Result card */
+/* ── Result card ── */
 .card {
   border-radius: var(--radius-lg);
   border: 1px solid;
-  overflow: hidden;
-  animation: fadeUp 0.3s ease forwards;
+  /* No overflow:hidden — it clips the circle and top padding */
+  animation: fadeIn 0.25s ease forwards;
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-.cardAlto {
-  background-color: #FEF2F2;
-  border-color: #FECACA;
-}
+/* Risk variants */
+.cardAlto  { background-color: #FEF2F2; border-color: #FECACA; }
+.cardMedio { background-color: #FFFBEB; border-color: #FDE68A; }
+.cardBajo  { background-color: #ECFDF5; border-color: #A7F3D0; }
 
-.cardMedio {
-  background-color: #FFFBEB;
-  border-color: #FDE68A;
-}
-
-.cardBajo {
-  background-color: #ECFDF5;
-  border-color: #A7F3D0;
-}
-
-/* Top row */
+/* ── Top row: circle + labels | filename ── */
 .topRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--space-5) var(--space-6);
   gap: var(--space-4);
+  flex-wrap: wrap;
 }
 
 .leftGroup {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-4);
+  flex-shrink: 0;
 }
 
-/* Circular percentage */
+/* ── Circular percentage ── */
 .percentCircle {
   position: relative;
   width: 80px;
   height: 80px;
   flex-shrink: 0;
-}
-
-.percentCircle svg {
-  transform: rotate(-90deg);
 }
 
 .percentText {
@@ -62,6 +50,8 @@
   font-size: 18px;
   font-weight: 800;
   color: var(--color-text-primary);
+  /* Pointer-events none so it doesn't interfere */
+  pointer-events: none;
 }
 
 .similarityLabel {
@@ -83,8 +73,10 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
+/* Filename pill */
 .fileInfo {
   display: flex;
   align-items: center;
@@ -92,9 +84,13 @@
   font-size: 13px;
   color: var(--color-text-secondary);
   font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Alert */
+/* ── Alert banner ── */
 .alert {
   margin: 0 var(--space-6) var(--space-4);
   background-color: rgba(245, 158, 11, 0.08);
@@ -119,19 +115,21 @@
   margin-left: 22px;
 }
 
-/* Meta info */
+/* ── Meta row ── */
 .metaRow {
   display: flex;
-  align-items: center;
-  gap: var(--space-8);
+  align-items: flex-start;
+  gap: var(--space-6);
   padding: var(--space-4) var(--space-6) var(--space-5);
   flex-wrap: wrap;
+  border-top: 1px solid rgba(0,0,0,0.05);
 }
 
 .metaItem {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  min-width: 80px;
 }
 
 .metaLabel {
@@ -141,6 +139,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .metaValue {

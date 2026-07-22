@@ -31,12 +31,11 @@ function Login() {
       <div className={styles.left}>
         {/* Logo */}
         <div className={styles.logoArea}>
-          <div className={styles.logoIcon}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-              <path d="M6 12v5c3 3 9 3 12 0v-5" />
-            </svg>
-          </div>
+          <img
+            src="/logo.png"
+            alt="GPN Manager logo"
+            className={styles.logoImg}
+          />
           <span className={styles.logoName}>BPM Manager</span>
           <span className={styles.logoTagline}>Gestión de Procesos de Negocio</span>
         </div>

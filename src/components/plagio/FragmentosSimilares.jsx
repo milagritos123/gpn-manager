@@ -30,10 +30,8 @@ function FragmentosSimilares({ fragmentos, coincidencias }) {
             <div key={idx} className={styles.fragmentCard}>
               <p className={styles.quote}>{f.cita}</p>
               <div className={styles.fragmentFooter}>
-                <span className={styles.origin}>
-                  {f.origen} — {f.autor_origen}
-                </span>
-                <span className={styles.coincidencia}>{f.coincidencia}% coincidencia</span>
+                <span className={styles.origin}>{f.origen}</span>
+                <span className={styles.coincidencia}>{f.porcentaje}% coincidencia</span>
               </div>
             </div>
           ))
@@ -47,9 +45,8 @@ function FragmentosSimilares({ fragmentos, coincidencias }) {
           <thead className={styles.thead}>
             <tr>
               <th className={styles.th}>Título</th>
-              <th className={styles.th}>Año</th>
-              <th className={styles.th}>Autor</th>
-              <th className={styles.th}>Carrera</th>
+              <th className={styles.th}>Grupo</th>
+              <th className={styles.th}>Año de Cursada</th>
               <th className={styles.th}>Similitud</th>
             </tr>
           </thead>
@@ -59,9 +56,8 @@ function FragmentosSimilares({ fragmentos, coincidencias }) {
               return (
                 <tr key={idx} className={styles.tr}>
                   <td className={styles.td}>{c.titulo}</td>
-                  <td className={styles.td}>{c.anio}</td>
-                  <td className={styles.td}>{c.autor}</td>
-                  <td className={styles.td}>{c.carrera}</td>
+                  <td className={styles.td} style={{ whiteSpace: 'nowrap' }}>{c.grupo}</td>
+                  <td className={styles.td} style={{ whiteSpace: 'nowrap' }}>{c.anioCursada || c.anio}</td>
                   <td className={styles.td}>
                     <div className={styles.progressCell}>
                       <div className={styles.progressTrack}>
