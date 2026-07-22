@@ -15,10 +15,10 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 520px;
+  width: 580px;
   max-width: 100vw;
   height: 100vh;
-  background: var(--color-surface);
+  background: #F9FAFB;
   box-shadow: -6px 0 32px rgba(0, 0, 0, 0.1);
   z-index: 101;
   display: flex;
@@ -31,6 +31,7 @@
 
 /* ── Header ── */
 .header {
+  background: white;
   padding: var(--space-5) var(--space-6);
   border-bottom: 1px solid var(--color-border);
   flex-shrink: 0;
@@ -80,47 +81,29 @@
   font-size: 20px;
   font-weight: 800;
   color: var(--color-text-primary);
-  margin-bottom: var(--space-2);
+  margin-bottom: 4px;
 }
 
-.infoRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-}
-
-.infoPill {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12.5px;
+.headerSubtitle {
+  font-size: 13px;
   color: var(--color-text-secondary);
-  font-weight: 500;
-}
-
-.infoPill svg { flex-shrink: 0; color: var(--color-text-muted); }
-
-.infoDivider {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background-color: var(--color-border);
 }
 
 /* ── Body ── */
 .body {
   flex: 1;
   overflow-y: auto;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
 /* ── Section ── */
 .section {
-  padding: var(--space-5) var(--space-6);
-  border-bottom: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .sectionHeader {
@@ -130,27 +113,156 @@
 }
 
 .sectionTitle {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--color-text-primary);
 }
 
-/* TP history table */
+.sectionIcon {
+  color: var(--color-primary);
+}
+
+/* ── Info Grid (General Info & Performance) ── */
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.infoCard {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoCardFull {
+  grid-column: span 2;
+}
+
+.infoLabel {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.infoValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.statCard {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.statIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.statIcon svg {
+  color: var(--color-primary);
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* ── Graph ── */
+.graphCard {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.graphLabel {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-3);
+  font-weight: 500;
+}
+
+.graphContainer {
+  height: 80px;
+  width: 100%;
+  position: relative;
+}
+
+.graphContainer svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.graphLine {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.graphPoint {
+  fill: var(--color-primary);
+  stroke: white;
+  stroke-width: 2;
+}
+
+/* ── History Table ── */
+.tableCard {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
 .tpTable { width: 100%; border-collapse: collapse; }
 
 .tpTh {
-  padding: 8px var(--space-3);
+  padding: 10px var(--space-4);
   text-align: left;
   font-size: 11px;
   font-weight: 700;
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-light);
+  background: #F9FAFB;
 }
 
 .tpTd {
-  padding: 10px var(--space-3);
+  padding: 12px var(--space-4);
   font-size: 12.5px;
   color: var(--color-text-primary);
   border-bottom: 1px solid var(--color-border-light);
@@ -163,7 +275,6 @@
   font-size: 13px;
 }
 
-/* Category badge small */
 .catBadge {
   display: inline-flex;
   padding: 2px 8px;
@@ -177,45 +288,28 @@
 .catMuyBueno  { background: var(--color-primary-lighter); color: var(--color-primary); }
 .catExcelente { background: #ECFDF5; color: #059669; }
 
-/* TFI fields row */
-.tfiRow {
+/* ── TFI Concept ── */
+.tfiDesc {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.tfiCard {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
   display: flex;
+  flex-direction: column;
   gap: var(--space-4);
 }
 
-.tfiField {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.tfiLabel {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-text-secondary);
-}
-
-.tfiInput {
-  padding: 9px var(--space-3);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  font-family: inherit;
-  color: var(--color-text-primary);
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.tfiInput:focus { border-color: var(--color-primary); }
-.tfiInput::placeholder { color: var(--color-text-muted); }
-
-/* Textarea */
 .textarea {
   width: 100%;
   min-height: 80px;
   padding: var(--space-3) var(--space-4);
-  border: 1.5px solid var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: 13px;
   font-family: inherit;
@@ -223,22 +317,148 @@
   resize: vertical;
   outline: none;
   transition: border-color 0.15s;
-  background: var(--color-surface);
+  background: #F9FAFB;
   line-height: 1.6;
 }
 
-.textarea::placeholder { color: var(--color-text-muted); }
-.textarea:focus { border-color: var(--color-primary); }
+.textarea:focus { border-color: var(--color-primary); background: white; }
 
-/* Empty TFI msg */
-.tfiEmpty {
-  font-size: 13px;
+.tfiGradeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tfiInput {
+  width: 70px;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  outline: none;
+}
+.tfiInput:focus { border-color: var(--color-primary); }
+
+/* ── Group Info ── */
+.groupCard {
+  background: white;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.groupStatsRow {
+  display: flex;
+  gap: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.groupStat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.groupStatLabel {
+  font-size: 11px;
   color: var(--color-text-muted);
-  font-style: italic;
+}
+.groupStatValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.integrantesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.integrantesTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+}
+
+.integranteItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  background: #F9FAFB;
+  transition: all 0.15s;
+}
+
+.integranteItem:hover {
+  background: white;
+  border-color: var(--color-border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.integranteItemActive {
+  background: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.integranteLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.integranteAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+.integranteInfo {
+  display: flex;
+  flex-direction: column;
+}
+.integranteName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.integranteLegajo {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.integranteRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.chevronIcon {
+  color: var(--color-text-muted);
 }
 
 /* ── Footer ── */
 .footer {
+  background: white;
   padding: var(--space-4) var(--space-6);
   border-top: 1px solid var(--color-border);
   display: flex;
