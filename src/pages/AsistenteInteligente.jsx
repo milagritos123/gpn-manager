@@ -9,40 +9,91 @@ const FILE_COLORS = {
   mp4: '#8B5CF6', png: '#10B981', default: '#6B7280',
 }
 
-function getSimulatedResponse(query) {
-  const q = query.toLowerCase()
-  if (q.includes('actividad') || q.includes('aula') || q.includes('propón')) return chatData.respuestas['bpmn actividad']
-  if (q.includes('evento') || q.includes('eventos')) return chatData.respuestas['eventos bpmn']
-  if (q.includes('ejercicio') || q.includes('ejercicios') || q.includes('prácticos')) return chatData.respuestas['ejercicios modelado']
-  if (q.includes('caso') || q.includes('estudio') || q.includes('optimización')) return chatData.respuestas['caso estudio']
-  if (q.includes('bibliografía') || q.includes('bibliografi') || q.includes('recomienda')) return chatData.respuestas['bibliografía']
-  if (q.includes('rediseño') || q.includes('estructura') || q.includes('clase')) return chatData.respuestas['rediseño procesos']
-  return chatData.respuestas['default']
-}
-
-function AsistenteInteligente() {
-  const [messages, setMessages] = useState([])
+function AsistenteInteligente({
+  conversations = [],
+  activeConversationId,
+  onUpdateConversationMessages,
+  onCreateConversation
+}) {
+  const [tempMessages, setTempMessages] = useState([])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef(null)
+
+  const activeConversation = conversations.find(c => c.id === activeConversationId)
+  const messages = activeConversationId ? (activeConversation?.messages || []) : tempMessages
 
   const indexados = recursosData.filter(r => r.estado === 'Indexado').length
   const procesando = recursosData.filter(r => r.estado === 'Procesando').length
 
   useEffect(() => {
+    if (activeConversationId === null) {
+      setTempMessages([])
+    }
+  }, [activeConversationId])
+
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isTyping])
 
-  const sendMessage = (text) => {
+  const sendMessage = async (text) => {
     const query = text || input.trim()
     if (!query) return
     setInput('')
-    setMessages(prev => [...prev, { role: 'user', text: query }])
+
+    const userMsg = { role: 'user', text: query }
+    const newMessages = [...messages, userMsg]
+
+    let currentId = activeConversationId
+    let isNew = false
+    if (!currentId) {
+      currentId = Date.now().toString()
+      isNew = true
+    }
+
+    if (isNew) {
+      setTempMessages(newMessages)
+    } else {
+      onUpdateConversationMessages(currentId, newMessages)
+    }
+
     setIsTyping(true)
-    setTimeout(() => {
+
+    try {
+      const response = await fetch('http://localhost:5678/webhook/2e1cccf4-e4ee-4b61-8523-e897ac62d608', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: query,
+          sessionId: currentId
+        })
+      })
+
+      const data = await response.json()
+      const responseText = data.output || data.text || data.message || 'Sin respuesta del asistente.'
+
       setIsTyping(false)
-      setMessages(prev => [...prev, { role: 'assistant', text: getSimulatedResponse(query) }])
-    }, 1400)
+      const assistantMsg = { role: 'assistant', text: responseText }
+      const finalMessages = [...newMessages, assistantMsg]
+      const title = isNew ? (query.length > 25 ? query.substring(0, 25) + '...' : query) : undefined
+
+      if (isNew) {
+        setTempMessages([])
+        onUpdateConversationMessages(currentId, finalMessages, title)
+      } else {
+        onUpdateConversationMessages(currentId, finalMessages)
+      }
+    } catch (error) {
+      setIsTyping(false)
+      const errorMsg = { role: 'assistant', text: 'No se pudo conectar con el asistente. Verificá que n8n esté corriendo.' }
+      const finalMessages = [...newMessages, errorMsg]
+      if (isNew) {
+        setTempMessages([])
+        onUpdateConversationMessages(currentId, finalMessages, query.substring(0, 25))
+      } else {
+        onUpdateConversationMessages(currentId, finalMessages)
+      }
+    }
   }
 
   const handleKeyDown = (e) => {
