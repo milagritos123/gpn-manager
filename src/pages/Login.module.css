@@ -50,8 +50,8 @@
 }
 
 .logoImg {
-  width: 52px;
-  height: 52px;
+  width: 76px;
+  height: 76px;
   border-radius: 14px;
   object-fit: cover;
   margin-bottom: var(--space-2);

@@ -73,12 +73,12 @@ function Sidebar({
       {/* Logo */}
       <div className={styles.logo}>
         <img
-          src="/logo.png"
+          src="/logo.jpg"
           alt="GPN Manager logo"
           className={styles.logoImg}
         />
         <div className={styles.logoText}>
-          <span className={styles.logoTitle}>GPN Manager</span>
+          <span className={styles.logoTitle}>CoraBOT</span>
           <span className={styles.logoSubtitle}>Gestión de Procesos</span>
         </div>
       </div>

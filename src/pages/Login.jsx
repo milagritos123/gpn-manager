@@ -36,7 +36,7 @@ function Login() {
             alt="GPN Manager logo"
             className={styles.logoImg}
           />
-          <span className={styles.logoName}>BPM Manager</span>
+          <span className={styles.logoName}>CoraBOT</span>
           <span className={styles.logoTagline}>Gestión de Procesos de Negocio</span>
         </div>
 
