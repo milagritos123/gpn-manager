@@ -6,7 +6,7 @@ import metricsData from '../data/metrics.json'
 import userData from '../data/user.json'
 import styles from './Dashboard.module.css'
 
-function Dashboard() {
+function Dashboard({ onNavigate }) {
   return (
     <div className={styles.page}>
       {/* Welcome header */}
@@ -30,7 +30,7 @@ function Dashboard() {
       {/* Chart + Activity */}
       <div className={styles.bottomGrid}>
         <BarChart />
-        <ActivityPanel />
+        <ActivityPanel onNavigate={onNavigate} />
       </div>
     </div>
   )

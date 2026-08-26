@@ -30,7 +30,7 @@ function BarChart() {
 
       <div className={styles.chartArea}>
         {/* Chart with grid */}
-        <div style={{ position: 'relative', height: `${CHART_HEIGHT + 28}px` }}>
+        <div className={styles.chartContainer}>
           {/* Grid lines */}
           <div className={styles.gridLines}>
             {[...GRID_STEPS].reverse().map((step) => (
@@ -44,17 +44,19 @@ function BarChart() {
           {/* Bars */}
           <div className={styles.barsWrapper}>
             {chartData.map((item) => {
-              const heightPx = (item.value / MAX_VALUE) * CHART_HEIGHT
+              const heightPercent = (item.value / MAX_VALUE) * 100
               return (
                 <div key={item.label} className={styles.barGroup}>
-                  <div
-                    className={styles.bar}
-                    style={{
-                      height: `${heightPx}px`,
-                      backgroundColor: item.color,
-                    }}
-                    title={`${item.label}: ${item.value}`}
-                  />
+                  <div className={styles.barContainer}>
+                    <div
+                      className={styles.bar}
+                      style={{
+                        height: `${heightPercent}%`,
+                        backgroundColor: item.color,
+                      }}
+                      title={`${item.label}: ${item.value}`}
+                    />
+                  </div>
                   <span className={styles.barLabel}>{item.label}</span>
                 </div>
               )

@@ -45,7 +45,18 @@ const iconConfig = {
   },
 }
 
-function ActivityPanel() {
+function ActivityPanel({ onNavigate }) {
+  const handleItemClick = (type) => {
+    if (!onNavigate) return
+    if (type === 'correction' || type === 'accepted') {
+      onNavigate('correccion')
+    } else if (type === 'alert') {
+      onNavigate('plagio')
+    } else if (type === 'resource') {
+      onNavigate('asistente')
+    }
+  }
+
   return (
     <div className={styles.panel}>
       <div className={styles.header}>
@@ -68,7 +79,18 @@ function ActivityPanel() {
         {activityData.map((item) => {
           const cfg = iconConfig[item.type] || iconConfig.correction
           return (
-            <li key={item.id} className={styles.item}>
+            <li
+              key={item.id}
+              className={styles.item}
+              onClick={() => handleItemClick(item.type)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleItemClick(item.type)
+                }
+              }}
+            >
               <div
                 className={styles.itemIcon}
                 style={{ backgroundColor: cfg.bg, color: cfg.color }}
