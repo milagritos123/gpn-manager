@@ -78,7 +78,7 @@ function Sidebar({
           className={styles.logoImg}
         />
         <div className={styles.logoText}>
-          <span className={styles.logoTitle}>CoraBOT</span>
+          <span className={styles.logoTitle}>CoraIA</span>
           <span className={styles.logoSubtitle}>Gestión de Procesos</span>
         </div>
       </div>

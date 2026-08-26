@@ -32,18 +32,17 @@ function Login() {
         {/* Logo */}
         <div className={styles.logoArea}>
           <img
-            src="/logo.png"
-            alt="GPN Manager logo"
+            src="/logo.jpg"
+            alt="CoraIA logo"
             className={styles.logoImg}
           />
-          <span className={styles.logoName}>CoraBOT</span>
-          <span className={styles.logoTagline}>Gestión de Procesos de Negocio</span>
+          <span className={styles.logoName}>CoraIA</span>
         </div>
 
         {/* Quote */}
         <div className={styles.quoteArea}>
           <p className={styles.quoteText}>
-            Gestión de Procesos y de Negocio
+            Corrección inteligente de trabajos prácticos con agente de IA
           </p>
         </div>
 
