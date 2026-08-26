@@ -10,7 +10,7 @@ import AsistenteInteligente from './pages/AsistenteInteligente'
 import { useEffect } from 'react'
 
 // Pages that manage their own full height (no inner scroll needed)
-const FULL_HEIGHT_PAGES = ['dashboard', 'asistente']
+const FULL_HEIGHT_PAGES = ['dashboard', 'correccion', 'alumnos', 'asistente']
 
 function AppShell() {
   const [activePage, setActivePage] = useState('dashboard')
