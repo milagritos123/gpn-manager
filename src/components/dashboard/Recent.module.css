@@ -1,0 +1,106 @@
+.panel {
+  padding: var(--space-5) var(--space-6);
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.header :global(.link) { font-size: var(--text-sm); }
+
+.primary {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.secondary {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--text-xs);
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Trabajos recientes */
+.list li + li { border-top: 1px solid var(--line); }
+
+.row {
+  width: calc(100% + 2 * var(--space-3));
+  margin: 0 calc(-1 * var(--space-3));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  text-align: left;
+  transition: background-color var(--dur-fast), transform var(--dur) var(--ease);
+}
+
+.row:hover { background: var(--violet-50); transform: translateX(2px); }
+
+/* Cascada de entrada */
+.list li, .cards li { animation: fade-up var(--dur) var(--ease) backwards; }
+.list li:nth-child(2), .cards li:nth-child(2) { animation-delay: 50ms; }
+.list li:nth-child(3), .cards li:nth-child(3) { animation-delay: 100ms; }
+.list li:nth-child(4), .cards li:nth-child(4) { animation-delay: 150ms; }
+.list li:nth-child(5) { animation-delay: 200ms; }
+
+.rowText { min-width: 0; }
+
+/* Análisis de plagio recientes */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.card {
+  width: 100%;
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #FFFFFF, #FBFAFE);
+  text-align: left;
+  transition: border-color var(--dur-fast), box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.card:hover { border-color: var(--violet-200); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.score {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.score .num {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 1100px) {
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 480px) {
+  .cards { grid-template-columns: 1fr; }
+}

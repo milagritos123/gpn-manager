@@ -1,170 +1,120 @@
 .panel {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
-  padding: var(--space-6);
+  padding: var(--space-5) var(--space-6);
   display: flex;
   flex-direction: column;
-  height: 100%;
-  box-sizing: border-box;
-}
-
-.header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: var(--space-6);
-  flex-shrink: 0;
-}
-
-.titleGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--color-text-primary);
+  min-width: 0;
 }
 
 .subtitle {
-  font-size: 12px;
-  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-top: 4px;
+  padding-left: 19px;
 }
 
-.improvement {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-green);
-  background-color: var(--color-green-light);
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
+/* Eje Y | área del gráfico, y debajo las etiquetas */
+.chart {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  grid-template-rows: minmax(200px, 1fr) auto;
+  column-gap: var(--space-3);
+  margin-top: var(--space-8);
 }
 
-/* Chart */
-.chartArea {
+.axis {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  flex: 1;
-  min-height: 0;
+  justify-content: space-between;
+  text-align: right;
+  font-size: var(--text-xs);
+  color: var(--ink-3);
+  line-height: 0;
 }
 
-.chartContainer {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+.plot { position: relative; }
 
-/* Y-axis grid lines */
-.gridLines {
+.grid {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 25px;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   pointer-events: none;
 }
 
-.gridLine {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  height: 0;
+.grid span { border-top: 1px dashed #EDEAF3; }
+.grid span:last-child { border-top: 1px solid var(--line-strong); }
+
+.bars {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+  padding: 0 var(--space-3);
 }
 
-.gridLineLabel {
-  font-size: 11px;
-  color: var(--color-text-muted);
-  width: 16px;
-  text-align: right;
-  flex-shrink: 0;
-}
+.bars li { height: 100%; }
 
-.gridLineSep {
-  flex: 1;
-  height: 1px;
-  background-color: var(--color-border-light);
-}
-
-.barsWrapper {
-  display: flex;
-  align-items: stretch;
-  gap: var(--space-6);
-  flex: 1;
-  padding-left: 28px;
-}
-
-.barGroup {
+.col {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
-  gap: var(--space-2);
-  flex: 1;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
-.barContainer {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+.bars li:nth-child(2) .bar { animation-delay: 60ms; }
+.bars li:nth-child(3) .bar { animation-delay: 120ms; }
+.bars li:nth-child(4) .bar { animation-delay: 180ms; }
+.bars li:nth-child(2) .barValue { animation-delay: 360ms; }
+.bars li:nth-child(3) .barValue { animation-delay: 420ms; }
+.bars li:nth-child(4) .barValue { animation-delay: 480ms; }
+
+.barValue {
+  font-family: var(--font-display);
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  padding-bottom: 2px;
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: 800;
+  color: var(--ink);
+  animation: fade-in var(--dur) var(--ease) 300ms backwards;
 }
 
 .bar {
-  width: 52px;
-  border-radius: 6px 6px 0 0;
-  transition: opacity 0.2s ease;
-  cursor: pointer;
-  min-height: 4px;
+  position: relative;
+  width: 100%;
+  max-width: 120px;
+  border-radius: var(--radius-sm) var(--radius-sm) 4px 4px;
+  transform-origin: bottom;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)) !important;
+  transition: filter var(--dur-fast), transform var(--dur) var(--ease);
+  animation: grow-y var(--dur-slow) var(--ease) 100ms backwards;
 }
 
-.bar:hover {
-  opacity: 0.82;
-}
+.col:hover .bar { filter: brightness(1.08) saturate(1.1); }
+.col:focus-visible { outline-offset: 2px; }
 
-.barLabel {
-  font-size: 11px;
-  color: var(--color-text-secondary);
-  text-align: center;
-  white-space: nowrap;
-  flex-shrink: 0;
-  height: 15px;
-  line-height: 15px;
-}
-
-/* Legend */
-.legend {
-  display: flex;
-  align-items: center;
+.labels {
+  font-family: var(--font-display);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--space-5);
-  flex-wrap: wrap;
-  flex-shrink: 0;
-  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3) 0;
+  text-align: center;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-2);
 }
 
-.legendItem {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--color-text-secondary);
-}
-
-.legendDot {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  flex-shrink: 0;
+@media (max-width: 480px) {
+  .bars, .labels { gap: var(--space-2); padding-left: 0; padding-right: 0; }
 }

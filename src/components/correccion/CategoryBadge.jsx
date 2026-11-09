@@ -1,20 +1,13 @@
-import styles from './CategoryBadge.module.css'
-
-const categoryMap = {
-  'Regular': { cls: styles.regular, dot: '#EF4444' },
-  'Bueno': { cls: styles.bueno, dot: '#F59E0B' },
-  'Muy Bueno': { cls: styles.muybueno, dot: '#7C3AED' },
-  'Excelente': { cls: styles.excelente, dot: '#10B981' },
+const categoryTone = {
+  'Regular': 'cat-regular',
+  'Bueno': 'cat-bueno',
+  'Muy Bueno': 'cat-muybueno',
+  'Excelente': 'cat-excelente',
 }
 
 function CategoryBadge({ categoria }) {
-  const config = categoryMap[categoria] || categoryMap['Bueno']
-  return (
-    <span className={`${styles.badge} ${config.cls}`}>
-      <span className={styles.dot} style={{ backgroundColor: config.dot }} />
-      {categoria}
-    </span>
-  )
+  const tone = categoryTone[categoria] || 'neutral'
+  return <span className={`tag tag--${tone}`}>{categoria}</span>
 }
 
 export default CategoryBadge

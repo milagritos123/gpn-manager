@@ -1,27 +1,19 @@
-import Sidebar from './Sidebar'
+import { useEffect, useRef } from 'react'
+import TopBar from './TopBar'
 import styles from './Layout.module.css'
 
-function Layout({
-  children,
-  activePage,
-  onNavigate,
-  fullHeight,
-  conversations,
-  activeConversationId,
-  onSelectConversation,
-  onCreateConversation
-}) {
+function Layout({ children, activePage, onNavigate, fullHeight }) {
+  const mainRef = useRef(null)
+
+  // Cada sección arranca desde arriba
+  useEffect(() => {
+    mainRef.current?.scrollTo(0, 0)
+  }, [activePage])
+
   return (
-    <div className={styles.layout}>
-      <Sidebar
-        activePage={activePage}
-        onNavigate={onNavigate}
-        conversations={conversations}
-        activeConversationId={activeConversationId}
-        onSelectConversation={onSelectConversation}
-        onCreateConversation={onCreateConversation}
-      />
-      <main className={fullHeight ? styles.mainFull : styles.main}>
+    <div className={styles.shell}>
+      <TopBar activePage={activePage} onNavigate={onNavigate} />
+      <main ref={mainRef} className={fullHeight ? styles.mainFull : styles.main}>
         {children}
       </main>
     </div>

@@ -1,25 +1,38 @@
 import { useState, useMemo } from 'react'
 import alumnosData from '../data/alumnos.json'
 import AlumnoDrawer from '../components/alumnos/AlumnoDrawer'
+import FilterBar from '../components/correccion/FilterBar'
+import Icon from '../components/ui/Icon'
+import { ESTADO_TONE, promedio } from '../components/alumnos/alumnoUtils'
+import { groupColor } from '../components/ui/groupColor'
 import styles from './GestionAlumnos.module.css'
 
 const GRUPOS = [...new Set(alumnosData.map((a) => a.grupo))].sort()
-const INITIAL_FILTERS = { search: '', grupo: '', estado: '' }
+const EMPTY_FILTERS = { search: '', grupo: '', estado: '' }
+const MAX_TP = Math.max(...alumnosData.map((a) => a.tpEntregados))
 
-const ESTADO_CLASSES = {
-  'Activo':    styles.estadoActivo,
-  'En riesgo': styles.estadoEnRiesgo,
-  'Irregular': styles.estadoIrregular,
+const countEstado = (e) => alumnosData.filter((a) => a.estado === e).length
+
+const STATUS_OPTIONS = [
+  { value: '', label: 'Todos', count: alumnosData.length },
+  { value: 'Activo', label: 'Activos', count: countEstado('Activo') },
+  { value: 'En riesgo', label: 'En riesgo', count: countEstado('En riesgo') },
+  { value: 'Irregular', label: 'Irregulares', count: countEstado('Irregular') },
+]
+
+function TPPips({ value }) {
+  return (
+    <span className={styles.pips} aria-label={`${value} de ${MAX_TP} entregados`}>
+      {Array.from({ length: MAX_TP }, (_, i) => (
+        <i key={i} className={i < value ? styles.pipOn : ''} />
+      ))}
+      <span className={`${styles.pipText} num`}>{value}/{MAX_TP}</span>
+    </span>
+  )
 }
 
-const ESTADO_DOTS = {
-  'Activo':    '#059669',
-  'En riesgo': '#B45309',
-  'Irregular': '#DC2626',
-}
-
-function GestionAlumnos() {
-  const [filters, setFilters]       = useState(INITIAL_FILTERS)
+function GestionAlumnos({ initialFilters }) {
+  const [filters, setFilters] = useState({ ...EMPTY_FILTERS, ...initialFilters })
   const [selectedAlumno, setSelected] = useState(null)
 
   const handleFilter = (key, val) => setFilters((p) => ({ ...p, [key]: val }))
@@ -35,156 +48,96 @@ function GestionAlumnos() {
   }, [filters])
 
   return (
-    <div className={styles.page}>
-      {/* Header */}
-      <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>Gestión de Alumnos</h1>
-        <p className={styles.pageSubtitle}>
-          Seguimiento del desempeño de los alumnos durante la cursada
-        </p>
-      </div>
-
-      {/* Filters */}
-      <div className={styles.filterSection}>
-        <div className={styles.filterTitle}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-          </svg>
-          Filtros
+    <div className="page page--fill">
+      <header className="page-header">
+        <div>
+          <h1 className="page-title">Gestión de Alumnos</h1>
+          <p className="page-lede">
+            Seguimiento individual del desempeño durante la cursada. Los alumnos en riesgo o irregulares aparecen marcados.
+          </p>
         </div>
-        <div className={styles.filterRow}>
-          {/* Search */}
-          <div className={styles.searchWrapper}>
-            <svg className={styles.searchIcon} width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              id="alumno-search"
-              type="text"
-              className={styles.searchInput}
-              placeholder="Buscar alumno..."
-              value={filters.search}
-              onChange={(e) => handleFilter('search', e.target.value)}
-            />
-          </div>
+      </header>
 
-          {/* Grupo */}
-          <select
-            id="alumno-filter-grupo"
-            className={styles.select}
-            value={filters.grupo}
-            onChange={(e) => handleFilter('grupo', e.target.value)}
-          >
-            <option value="">Todos los grupos</option>
-            {GRUPOS.map((g) => (
-              <option key={g} value={g}>{g}</option>
-            ))}
-          </select>
+      <FilterBar
+        filters={filters}
+        onFilterChange={handleFilter}
+        onClear={() => setFilters(EMPTY_FILTERS)}
+        searchPlaceholder="Buscar por nombre o legajo"
+        statusKey="estado"
+        statusOptions={STATUS_OPTIONS}
+        selects={[{ key: 'grupo', placeholder: 'Todos los grupos', options: GRUPOS }]}
+        resultCount={filtered.length}
+      />
 
-          {/* Estado */}
-          <select
-            id="alumno-filter-estado"
-            className={styles.select}
-            value={filters.estado}
-            onChange={(e) => handleFilter('estado', e.target.value)}
-          >
-            <option value="">Todos los estados</option>
-            <option value="Activo">Activo</option>
-            <option value="En riesgo">En riesgo</option>
-            <option value="Irregular">Irregular</option>
-          </select>
-
-          <button
-            id="alumno-filter-clear"
-            className={styles.clearBtn}
-            onClick={() => setFilters(INITIAL_FILTERS)}
-          >
-            Limpiar filtros
-          </button>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr>
-              <th className={styles.th}>Alumno</th>
-              <th className={styles.th}>Legajo</th>
-              <th className={styles.th}>Grupo</th>
-              <th className={styles.th}>TP Entregados</th>
-              <th className={styles.th}>Estado</th>
-              <th className={styles.th}></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.length === 0 ? (
-              <tr className={styles.emptyRow}>
-                <td colSpan={6}>No se encontraron alumnos para los filtros aplicados.</td>
+      <div className={`panel ${styles.tablePanel}`}>
+        <div className="table-scroll">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Alumno</th>
+                <th>Grupo</th>
+                <th>TP entregados</th>
+                <th className="is-num">Promedio</th>
+                <th>Estado</th>
+                <th><span className="visually-hidden">Acción</span></th>
               </tr>
-            ) : (
-              filtered.map((alumno) => (
-                <tr
-                  key={alumno.id}
-                  className={styles.tr}
-                  onClick={() => setSelected(alumno)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {/* Alumno */}
-                  <td className={styles.td}>
-                    <div className={styles.studentCell}>
-                      <div
-                        className={styles.avatar}
-                        style={{ backgroundColor: alumno.avatarColor }}
-                      >
-                        {alumno.iniciales}
-                      </div>
-                      <span className={styles.studentName}>{alumno.nombre}</span>
-                    </div>
-                  </td>
-
-                  {/* Legajo */}
-                  <td className={styles.td}>{alumno.legajo}</td>
-
-                  {/* Grupo */}
-                  <td className={styles.td}>{alumno.grupo}</td>
-
-                  {/* TP Entregados */}
-                  <td className={styles.td} style={{ textAlign: 'center', fontWeight: 700 }}>
-                    {alumno.tpEntregados}
-                  </td>
-
-                  {/* Estado */}
-                  <td className={styles.td}>
-                    <span className={`${styles.estadoBadge} ${ESTADO_CLASSES[alumno.estado] || ''}`}>
-                      <span style={{ width: 7, height: 7, borderRadius: '50%', background: ESTADO_DOTS[alumno.estado], display: 'inline-block' }} />
-                      {alumno.estado}
-                    </span>
-                  </td>
-
-                  {/* Acción */}
-                  <td className={styles.td} onClick={(e) => e.stopPropagation()}>
-                    <button
-                      id={`ver-alumno-${alumno.id}`}
-                      className={styles.viewBtn}
-                      onClick={() => setSelected(alumno)}
-                      title="Ver detalle"
-                    >
-                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                    </button>
-                  </td>
+            </thead>
+            <tbody>
+              {filtered.length === 0 ? (
+                <tr className="empty">
+                  <td colSpan={6}>No hay alumnos que coincidan con los filtros aplicados.</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                filtered.map((alumno) => {
+                  const prom = promedio(alumno)
+                  const open = () => setSelected(alumno)
+                  return (
+                    <tr
+                      key={alumno.id}
+                      className="is-clickable"
+                      tabIndex={0}
+                      onClick={open}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open() } }}
+                    >
+                      <td>
+                        <div className={styles.student}>
+                          <span className={styles.avatar} style={groupColor(alumno.grupoNum)}>{alumno.iniciales}</span>
+                          <div>
+                            <div className="cell-primary">{alumno.nombre}</div>
+                            <div className="cell-secondary num">Legajo {alumno.legajo}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span className={styles.groupChip} style={groupColor(alumno.grupoNum)}>{alumno.grupo}</span>
+                      </td>
+                      <td><TPPips value={alumno.tpEntregados} /></td>
+                      <td className="is-num">
+                        <span className={styles.prom}>{prom === null ? '—' : prom.toFixed(1)}</span>
+                      </td>
+                      <td>
+                        <span className={`tag tag--${ESTADO_TONE[alumno.estado] || 'neutral'}`}>{alumno.estado}</span>
+                      </td>
+                      <td className={styles.actionCell}>
+                        <button
+                          id={`ver-alumno-${alumno.id}`}
+                          className="btn btn-ghost btn-sm"
+                          onClick={(e) => { e.stopPropagation(); open() }}
+                          tabIndex={-1}
+                        >
+                          Ver ficha
+                          <Icon name="arrowRight" />
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Drawer */}
       {selectedAlumno && (
         <AlumnoDrawer alumno={selectedAlumno} onClose={() => setSelected(null)} />
       )}

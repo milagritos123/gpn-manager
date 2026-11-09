@@ -1,83 +1,71 @@
+import { RISK, riskOf } from './risk'
 import styles from './FragmentosSimilares.module.css'
 
-function getBarColor(pct) {
-  if (pct >= 70) return '#EF4444'
-  if (pct >= 40) return '#F59E0B'
-  return '#10B981'
+// `riesgo` (si viene del análisis) manda sobre el umbral calculado
+export function SimilarityCell({ value, riesgo }) {
+  const risk = RISK[riesgo] || riskOf(value)
+  return (
+    <div className={styles.simCell}>
+      <span className={`${styles.simValue} num`} style={{ color: risk.text }}>{value}%</span>
+      <span className={styles.simTrack} aria-hidden="true">
+        <span style={{ width: `${value}%`, background: risk.color }} />
+      </span>
+    </div>
+  )
 }
 
-function FragmentosSimilares({ fragmentos, coincidencias }) {
+function FragmentosSimilares({ fragmentos = [], coincidencias = [] }) {
   return (
-    <>
-      {/* Fragmentos */}
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
-            <line x1="8" y1="6" x2="21" y2="6" />
-            <line x1="8" y1="12" x2="21" y2="12" />
-            <line x1="8" y1="18" x2="21" y2="18" />
-            <line x1="3" y1="6" x2="3.01" y2="6" />
-            <line x1="3" y1="12" x2="3.01" y2="12" />
-            <line x1="3" y1="18" x2="3.01" y2="18" />
-          </svg>
-          Fragmentos similares encontrados
+    <div className={styles.wrap}>
+      <section>
+        <h3 className={styles.title}>
+          Fragmentos similares <span className="num">{fragmentos.length}</span>
         </h3>
-
         {fragmentos.length === 0 ? (
-          <p className={styles.emptyText}>No se encontraron fragmentos similares significativos.</p>
+          <p className={styles.empty}>No se encontraron fragmentos similares significativos.</p>
         ) : (
-          fragmentos.map((f, idx) => (
-            <div key={idx} className={styles.fragmentCard}>
-              <p className={styles.quote}>{f.cita}</p>
-              <div className={styles.fragmentFooter}>
-                <span className={styles.origin}>{f.origen}</span>
-                <span className={styles.coincidencia}>{f.porcentaje}% coincidencia</span>
-              </div>
-            </div>
-          ))
+          <ol className={styles.fragments}>
+            {fragmentos.map((f, idx) => (
+              <li key={idx} className={styles.fragment} style={{ borderColor: riskOf(f.porcentaje).color }}>
+                <blockquote className={styles.quote}>“{f.cita}”</blockquote>
+                <p className={styles.source}>
+                  <span>{f.origen}</span>
+                  <span className="num" style={{ color: riskOf(f.porcentaje).text }}>{f.porcentaje}% de coincidencia</span>
+                </p>
+              </li>
+            ))}
+          </ol>
         )}
-      </div>
+      </section>
 
-      {/* Coincidences table */}
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Trabajos con mayor coincidencia</h3>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr>
-              <th className={styles.th}>Título</th>
-              <th className={styles.th}>Grupo</th>
-              <th className={styles.th}>Año de Cursada</th>
-              <th className={styles.th}>Similitud</th>
-            </tr>
-          </thead>
-          <tbody>
-            {coincidencias.map((c, idx) => {
-              const color = getBarColor(c.similitud)
-              return (
-                <tr key={idx} className={styles.tr}>
-                  <td className={styles.td}>{c.titulo}</td>
-                  <td className={styles.td} style={{ whiteSpace: 'nowrap' }}>{c.grupo}</td>
-                  <td className={styles.td} style={{ whiteSpace: 'nowrap' }}>{c.anioCursada || c.anio}</td>
-                  <td className={styles.td}>
-                    <div className={styles.progressCell}>
-                      <div className={styles.progressTrack}>
-                        <div
-                          className={styles.progressBar}
-                          style={{ width: `${c.similitud}%`, backgroundColor: color }}
-                        />
-                      </div>
-                      <span className={styles.progressValue} style={{ color }}>
-                        {c.similitud}%
-                      </span>
-                    </div>
-                  </td>
+      {coincidencias.length > 0 && (
+        <section>
+          <h3 className={styles.title}>Trabajos con mayor coincidencia</h3>
+          <div className={`table-scroll ${styles.tableBox}`}>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Trabajo</th>
+                  <th>Grupo</th>
+                  <th className="is-num">Año</th>
+                  <th>Similitud</th>
                 </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-    </>
+              </thead>
+              <tbody>
+                {coincidencias.map((c, idx) => (
+                  <tr key={idx}>
+                    <td className={styles.wrapCell}>{c.titulo}</td>
+                    <td>{c.grupo}</td>
+                    <td className="is-num">{c.anioCursada || c.anio}</td>
+                    <td><SimilarityCell value={c.similitud} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+    </div>
   )
 }
 

@@ -1,71 +1,84 @@
+import Icon from '../ui/Icon'
 import styles from './FilterBar.module.css'
 
-function FilterBar({ filters, onFilterChange, onClear, searchPlaceholder = 'Buscar...' }) {
-  return (
-    <div className={styles.filterSection}>
-      <div className={styles.filterTitle}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-        </svg>
-        Filtros
-      </div>
+/**
+ * Barra de filtros compartida.
+ * - `statusKey` + `statusOptions`: filtro principal como control segmentado (con conteos).
+ * - `selects`: filtros secundarios como desplegables.
+ */
+function FilterBar({
+  filters,
+  onFilterChange,
+  onClear,
+  searchPlaceholder = 'Buscar...',
+  statusKey,
+  statusOptions = [],
+  selects = [],
+  resultCount,
+}) {
+  const hasFilters = Object.values(filters).some((v) => v !== '')
 
-      <div className={styles.filterRow}>
-        {/* Search */}
-        <div className={styles.searchWrapper}>
-          <svg
-            className={styles.searchIcon}
-            width="15"
-            height="15"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
+  return (
+    <div className={styles.bar}>
+      {statusOptions.length > 0 && (
+        <div className="segmented" role="group" aria-label="Filtrar por estado">
+          {statusOptions.map((opt) => (
+            <button
+              key={opt.value || 'all'}
+              aria-pressed={filters[statusKey] === opt.value}
+              onClick={() => onFilterChange(statusKey, opt.value)}
+            >
+              {opt.label}
+              <span className="count">{opt.count}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className={styles.secondary}>
+        <label className={`search ${styles.search}`}>
+          <Icon name="search" />
+          <span className="visually-hidden">{searchPlaceholder}</span>
           <input
             id="filter-search"
-            type="text"
-            className={styles.searchInput}
+            type="search"
+            className="field"
             placeholder={searchPlaceholder}
             value={filters.search}
             onChange={(e) => onFilterChange('search', e.target.value)}
           />
-        </div>
+        </label>
 
-        {/* Categoría */}
-        <select
-          id="filter-categoria"
-          className={styles.select}
-          value={filters.categoria}
-          onChange={(e) => onFilterChange('categoria', e.target.value)}
-        >
-          <option value="">Todas las categorías</option>
-          <option value="Regular">Regular</option>
-          <option value="Bueno">Bueno</option>
-          <option value="Muy Bueno">Muy Bueno</option>
-          <option value="Excelente">Excelente</option>
-        </select>
+        {selects.map((s) => (
+          <label key={s.key} className={styles.selectWrap}>
+            <span className="visually-hidden">{s.placeholder}</span>
+            <select
+              id={`filter-${s.key}`}
+              className={`field ${filters[s.key] ? styles.selectActive : ''}`}
+              value={filters[s.key]}
+              onChange={(e) => onFilterChange(s.key, e.target.value)}
+            >
+              <option value="">{s.placeholder}</option>
+              {s.options.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+          </label>
+        ))}
 
-        {/* Estado */}
-        <select
-          id="filter-estado"
-          className={styles.select}
-          value={filters.estado}
-          onChange={(e) => onFilterChange('estado', e.target.value)}
-        >
-          <option value="">Todos los estados</option>
-          <option value="Pendiente">Pendiente</option>
-          <option value="Aceptado">Aceptado</option>
-          <option value="Rechazado">Rechazado</option>
-        </select>
-
-        <button id="filter-clear" className={styles.clearBtn} onClick={onClear}>
-          Limpiar filtros
-        </button>
+        {hasFilters && (
+          <button id="filter-clear" className="btn btn-ghost" onClick={onClear}>
+            <Icon name="close" />
+            Limpiar
+          </button>
+        )}
       </div>
+
+      {typeof resultCount === 'number' && (
+        <p className={styles.count} aria-live="polite">
+          {resultCount} {resultCount === 1 ? 'resultado' : 'resultados'}
+        </p>
+      )}
     </div>
   )
 }

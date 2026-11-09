@@ -1,24 +1,103 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, Fragment } from 'react'
 import recursosData from '../data/recursosBase.json'
 import chatData from '../data/chatRespuestas.json'
+import Icon from '../components/ui/Icon'
+import { useToast } from '../components/ui/Toast'
 import styles from './AsistenteInteligente.module.css'
 
-// File type → color map
-const FILE_COLORS = {
-  pdf: '#EF4444', pptx: '#F59E0B', docx: '#3B82F6',
-  mp4: '#8B5CF6', png: '#10B981', default: '#6B7280',
+// Tipo de archivo reconocible de un vistazo
+const EXT_COLOR = {
+  pdf: { color: 'var(--red-700)', background: 'var(--red-50)' },
+  docx: { color: 'var(--g1)', background: 'var(--g1-bg)' },
+  pptx: { color: 'var(--amber-700)', background: 'var(--amber-50)' },
+  mp4: { color: 'var(--violet-700)', background: 'var(--violet-50)' },
+  png: { color: 'var(--g2)', background: 'var(--g2-bg)' },
+  default: { color: 'var(--ink-2)', background: 'var(--sunken)' },
 }
+
+/* ── Formato liviano para las respuestas (negritas, listas, párrafos) ── */
+function inline(text) {
+  return text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).map((part, i) => {
+    if (/^\*\*[^*]+\*\*$/.test(part)) return <strong key={i}>{part.slice(2, -2)}</strong>
+    if (/^\*[^*]+\*$/.test(part)) return <em key={i}>{part.slice(1, -1)}</em>
+    return <Fragment key={i}>{part}</Fragment>
+  })
+}
+
+const BULLET = /^\s*[-•*]\s+/
+const NUMBERED = /^\s*\d+[.)]\s+/
+const lineKind = (l) => (BULLET.test(l) ? 'ul' : NUMBERED.test(l) ? 'ol' : 'p')
+
+function RichText({ text }) {
+  // Agrupa líneas consecutivas del mismo tipo: así "Intro:\n- a\n- b" muestra el texto y luego la lista
+  const groups = []
+  String(text).trim().split(/\n{2,}/).forEach((block) => {
+    block.split('\n').forEach((line, j) => {
+      const kind = lineKind(line)
+      const last = groups[groups.length - 1]
+      if (last && last.kind === kind && j > 0) last.lines.push(line)
+      else groups.push({ kind, lines: [line] })
+    })
+  })
+
+  return groups.map((g, i) => {
+    if (g.kind === 'ul') {
+      return <ul key={i}>{g.lines.map((l, j) => <li key={j}>{inline(l.replace(BULLET, ''))}</li>)}</ul>
+    }
+    if (g.kind === 'ol') {
+      return <ol key={i}>{g.lines.map((l, j) => <li key={j}>{inline(l.replace(NUMBERED, ''))}</li>)}</ol>
+    }
+    return (
+      <p key={i}>
+        {g.lines.map((l, j) => <Fragment key={j}>{j > 0 && <br />}{inline(l)}</Fragment>)}
+      </p>
+    )
+  })
+}
+
+// Ícono y tono de cada tarjeta de sugerencia, por posición
+const SUGGESTION_STYLE = [
+  { icon: 'sparkle', tone: 'violet' },
+  { icon: 'book', tone: 'blue' },
+  { icon: 'layers', tone: 'teal' },
+  { icon: 'file', tone: 'coral' },
+  { icon: 'book', tone: 'green' },
+  { icon: 'pen', tone: 'amber' },
+]
+
+/* ── Marca chica de CoraIA junto a su nombre ── */
+function CoraMark() {
+  return (
+    <span className={styles.mark} aria-hidden="true">
+      <Icon name="sparkle" size={13} strokeWidth={2} />
+    </span>
+  )
+}
+
+const DELETE_ANIM_MS = 220
 
 function AsistenteInteligente({
   conversations = [],
   activeConversationId,
   onUpdateConversationMessages,
-  onCreateConversation
+  onCreateConversation,
+  onSelectConversation,
+  onDeleteConversation,
 }) {
+  const notify = useToast()
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
+  const [deletingId, setDeletingId] = useState(null)
+  const newConvRef = useRef(null)
   const [tempMessages, setTempMessages] = useState([])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [panel, setPanel] = useState(null) // 'history' en pantallas angostas
+  const [historyCollapsed, setHistoryCollapsed] = useState(false)
+  const [view, setView] = useState('chat') // menú interno: 'chat' | 'kb'
+  const [kbQuery, setKbQuery] = useState('')
   const messagesEndRef = useRef(null)
+  const inputRef = useRef(null)
+  const uploadRef = useRef(null)
 
   const activeConversation = conversations.find(c => c.id === activeConversationId)
   const messages = activeConversationId ? (activeConversation?.messages || []) : tempMessages
@@ -33,12 +112,22 @@ function AsistenteInteligente({
   }, [activeConversationId])
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // Solo baja al último mensaje si hay conversación (la bienvenida arranca arriba)
+    if (messages.length === 0 && !isTyping) return
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages, isTyping])
+
+  // Altura automática del campo de texto
+  useEffect(() => {
+    const el = inputRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`
+  }, [input])
 
   const sendMessage = async (text) => {
     const query = text || input.trim()
-    if (!query) return
+    if (!query || isTyping) return
     setInput('')
 
     const userMsg = { role: 'user', text: query }
@@ -85,7 +174,7 @@ function AsistenteInteligente({
       }
     } catch (error) {
       setIsTyping(false)
-      const errorMsg = { role: 'assistant', text: 'No se pudo conectar con el asistente. Verificá que n8n esté corriendo.' }
+      const errorMsg = { role: 'assistant', text: 'No se pudo conectar con el asistente. Verificá que n8n esté corriendo.', error: true }
       const finalMessages = [...newMessages, errorMsg]
       if (isNew) {
         setTempMessages([])
@@ -100,184 +189,364 @@ function AsistenteInteligente({
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() }
   }
 
+  const selectConversation = (id) => {
+    onSelectConversation?.(id)
+    setView('chat')
+    setPanel(null)
+  }
+
+  const newConversation = () => {
+    onCreateConversation()
+    setView('chat')
+    setPanel(null)
+    inputRef.current?.focus()
+  }
+
+  // Borrado con confirmación en línea y salida animada
+  const deleteConversation = (chat) => {
+    setConfirmDeleteId(null)
+    setDeletingId(chat.id)
+    setTimeout(() => {
+      onDeleteConversation?.(chat.id)
+      setDeletingId(null)
+      notify('Conversación eliminada', { detail: chat.title })
+      newConvRef.current?.focus()
+    }, DELETE_ANIM_MS)
+  }
+
+  const handleUpload = (e) => {
+    const file = e.target.files[0]
+    if (file) notify('Recurso recibido', { detail: `${file.name} se está indexando`, tone: 'info' })
+    e.target.value = ''
+  }
+
+  // Columna de conversaciones: se colapsa en escritorio y es panel superpuesto en pantallas angostas
+  const toggleHistory = () => {
+    if (window.matchMedia('(max-width: 860px)').matches) setPanel(panel === 'history' ? null : 'history')
+    else setHistoryCollapsed((v) => !v)
+  }
+
+  const recursosFiltrados = recursosData.filter((r) =>
+    r.nombre.toLowerCase().includes(kbQuery.trim().toLowerCase())
+  )
+
   return (
-    <div className={styles.page}>
-      {/* ── Chat panel ── */}
-      <div className={styles.chatPanel}>
-        {/* Header */}
-        <div className={styles.chatHeader}>
-          <div className={styles.chatHeaderIcon}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-          </div>
-          <div>
-            <p className={styles.chatHeaderTitle}>Asistente Inteligente (RAG)</p>
-            <p className={styles.chatHeaderSub}>Preparación de clases basada en tu documentación</p>
-          </div>
-        </div>
+    <div className={`page page--fill ${styles.page}`}>
+      <div className={`panel ${styles.workspace} ${historyCollapsed ? styles.collapsed : ''} ${panel ? styles[`open-${panel}`] : ''}`}>
 
-        {/* Messages */}
-        <div className={styles.messages}>
-          {/* Welcome message */}
-          <div className={styles.welcomeMsg}>
-            <div className={styles.assistantAvatar}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              </svg>
-            </div>
-            <div className={styles.welcomeBubble}>
-              ¡Hola, Prof. Fernández! 👋 Soy tu asistente inteligente para la preparación de clases de{' '}
-              <strong>Gestión de Procesos de Negocio</strong>. Puedo ayudarte a planificar clases, generar
-              actividades, crear casos de estudio, recomendar bibliografía y más, utilizando exclusivamente
-              la documentación que has cargado en la base de conocimiento.
-              <br /><br />
-              ¿En qué puedo ayudarte hoy?
-            </div>
-          </div>
-
-          {/* Suggestions (shown only when no messages yet) */}
-          {messages.length === 0 && (
-            <div className={styles.suggestionsSection}>
-              <span className={styles.suggestionsLabel}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                Sugerencias para empezar
-              </span>
-              <div className={styles.suggestionsGrid}>
-                {chatData.sugerencias.map((s, i) => (
-                  <button
-                    key={i}
-                    id={`sugerencia-${i}`}
-                    className={styles.suggestionCard}
-                    onClick={() => sendMessage(s)}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Conversation */}
-          {messages.map((msg, idx) => (
-            msg.role === 'user' ? (
-              <div key={idx} className={styles.userMsg}>
-                <div className={styles.userBubble}>{msg.text}</div>
-              </div>
-            ) : (
-              <div key={idx} className={styles.assistantMsg}>
-                <div className={styles.assistantAvatar}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                  </svg>
-                </div>
-                <div className={styles.assistantBubble}>{msg.text}</div>
-              </div>
-            )
-          ))}
-
-          {/* Typing indicator */}
-          {isTyping && (
-            <div className={styles.assistantMsg}>
-              <div className={styles.assistantAvatar}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-              </div>
-              <div className={`${styles.assistantBubble} ${styles.typing}`}>
-                <span className={styles.typingDot} />
-                <span className={styles.typingDot} />
-                <span className={styles.typingDot} />
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Input */}
-        <div className={styles.inputArea}>
-          <div className={styles.inputRow}>
-            <input
-              id="chat-input"
-              className={styles.chatInput}
-              placeholder="Escribe tu consulta sobre Gestión de Procesos de Negocio..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-            <button
-              id="chat-send"
-              className={styles.sendBtn}
-              onClick={() => sendMessage()}
-              disabled={!input.trim() || isTyping}
-              title="Enviar"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <line x1="22" y1="2" x2="11" y2="13" />
-                <polygon points="22 2 15 22 11 13 2 9 22 2" />
-              </svg>
+        {/* ── Conversaciones ── */}
+        <aside className={styles.history} aria-label="Conversaciones" aria-hidden={historyCollapsed || undefined}>
+          <div className={styles.sideHeader}>
+            <h2 className={styles.sideTitle}>Conversaciones</h2>
+            <button className={`btn btn-icon ${styles.sideClose}`} onClick={() => setPanel(null)} aria-label="Cerrar">
+              <Icon name="close" size={16} />
             </button>
           </div>
-          <p className={styles.inputNote}>
-            El asistente responde exclusivamente con la documentación cargada en la base de conocimiento
-          </p>
-        </div>
-      </div>
+          <div className={styles.sideAction}>
+            <button ref={newConvRef} className="btn btn-primary" onClick={newConversation} style={{ width: '100%' }}>
+              <Icon name="plus" />
+              Nueva conversación
+            </button>
+          </div>
+          {conversations.length > 0 ? (
+            <ul className={styles.historyList}>
+              {conversations.map((chat) => {
+                const active = activeConversationId === chat.id
+                const confirming = confirmDeleteId === chat.id
+                return (
+                  <li
+                    key={chat.id}
+                    className={`${styles.historyRow} ${active ? styles.historyActive : ''} ${deletingId === chat.id ? styles.historyLeaving : ''}`}
+                    onMouseLeave={() => confirming && setConfirmDeleteId(null)}
+                  >
+                    {confirming ? (
+                      <div
+                        className={styles.confirmRow}
+                        role="group"
+                        aria-label={`¿Eliminar la conversación «${chat.title}»?`}
+                        onKeyDown={(e) => { if (e.key === 'Escape') setConfirmDeleteId(null) }}
+                      >
+                        <Icon name="trash" size={15} />
+                        <span className={styles.confirmText}>¿Borrar?</span>
+                        <button
+                          className={`${styles.confirmBtn} ${styles.confirmYes}`}
+                          onClick={() => deleteConversation(chat)}
+                          aria-label="Confirmar eliminación"
+                          autoFocus
+                        >
+                          <Icon name="check" size={14} strokeWidth={2.5} />
+                        </button>
+                        <button
+                          className={styles.confirmBtn}
+                          onClick={() => setConfirmDeleteId(null)}
+                          aria-label="Cancelar"
+                        >
+                          <Icon name="x" size={14} strokeWidth={2.5} />
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          className={styles.historyItem}
+                          onClick={() => selectConversation(chat.id)}
+                          title={chat.title}
+                          aria-current={active ? 'true' : undefined}
+                        >
+                          <Icon name="chat" size={15} className={styles.historyIcon} />
+                          <span className={styles.historyText}>{chat.title}</span>
+                        </button>
+                        {onDeleteConversation && (
+                          <button
+                            className={styles.deleteBtn}
+                            onClick={() => setConfirmDeleteId(chat.id)}
+                            aria-label={`Eliminar conversación «${chat.title}»`}
+                            title="Eliminar conversación"
+                          >
+                            <Icon name="trash" size={15} />
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <div className={styles.sideEmpty}>
+              <span className={styles.sideEmptyIcon}><Icon name="chat" size={18} /></span>
+              <p>Tus conversaciones van a aparecer acá.</p>
+            </div>
+          )}
+        </aside>
 
-      {/* ── Knowledge Base panel ── */}
-      <div className={styles.kbPanel}>
-        <div className={styles.kbHeader}>
-          <h2 className={styles.kbTitle}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="20" x2="18" y2="10" />
-              <line x1="12" y1="20" x2="12" y2="4" />
-              <line x1="6" y1="20" x2="6" y2="14" />
-            </svg>
-            Base de conocimiento
-          </h2>
-          <button id="kb-upload-btn" className={styles.uploadBtn}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="16 16 12 12 8 16" />
-              <line x1="12" y1="12" x2="12" y2="21" />
-              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
-            </svg>
-            Subir recurso
-          </button>
-        </div>
+        {/* ── Área principal ── */}
+        <section className={styles.main} aria-label="Asistente Inteligente">
+          {/* Barra del módulo: logo (único lugar), título y menú interno */}
+          <header className={styles.moduleBar}>
+            <button
+              className={styles.iconBtn}
+              onClick={toggleHistory}
+              aria-label={historyCollapsed ? 'Mostrar conversaciones' : 'Ocultar conversaciones'}
+              title={historyCollapsed ? 'Mostrar conversaciones' : 'Ocultar conversaciones'}
+              aria-expanded={!historyCollapsed}
+            >
+              <Icon name="sidebar" size={18} />
+            </button>
 
-        {/* Stats */}
-        <div className={styles.kbStats}>
-          <span className={styles.kbStat}>
-            <span className={styles.statDotGreen} /> {indexados} indexados
-          </span>
-          <span className={styles.kbStat}>
-            <span className={styles.statDotOrange} /> {procesando} procesando
-          </span>
-          <span className={styles.statTotal}>{recursosData.length} total</span>
-        </div>
-
-        {/* Resource list */}
-        <div className={styles.kbList}>
-          {recursosData.map((recurso) => {
-            const color = FILE_COLORS[recurso.extension] || FILE_COLORS.default
-            return (
-              <div key={recurso.id} className={styles.kbItem}>
-                <div className={styles.kbFileIcon} style={{ backgroundColor: color }}>
-                  {recurso.extension.toUpperCase().slice(0, 3)}
-                </div>
-                <div className={styles.kbFileInfo}>
-                  <p className={styles.kbFileName} title={recurso.nombre}>{recurso.nombre}</p>
-                  <p className={styles.kbFileMeta}>{recurso.tipo} · {recurso.tamano} · {recurso.fecha}</p>
-                </div>
-                <span className={`${styles.kbStatus} ${recurso.estado === 'Indexado' ? styles.statusIndexado : styles.statusProcesando}`}>
-                  {recurso.estado === 'Indexado' ? '✓ Indexado' : '⏳ Procesando...'}
-                </span>
+            <div className={styles.brand}>
+              <img src="/logo.jpg" alt="" className={styles.brandLogo} />
+              <div className={styles.brandText}>
+                <h1 className={styles.chatTitle}>
+                  {view === 'chat' ? (activeConversation?.title || 'Asistente Inteligente') : 'Base de conocimiento'}
+                </h1>
+                <p className={styles.chatSub}>
+                  <span className={styles.liveDot} />
+                  Responde solo con tus {indexados} recursos indexados
+                </p>
               </div>
-            )
-          })}
-        </div>
+            </div>
+
+            <nav className={styles.tabs} role="tablist" aria-label="Secciones del asistente">
+              <span className={styles.tabIndicator} data-view={view} aria-hidden="true" />
+              <button
+                role="tab"
+                aria-selected={view === 'chat'}
+                className={styles.tab}
+                onClick={() => setView('chat')}
+              >
+                <Icon name="chat" size={15} />
+                Chat
+              </button>
+              <button
+                role="tab"
+                aria-selected={view === 'kb'}
+                className={styles.tab}
+                onClick={() => setView('kb')}
+              >
+                <Icon name="layers" size={15} />
+                <span className={styles.tabLabelLong}>Base de conocimiento</span>
+                <span className={styles.tabLabelShort}>Base</span>
+                <span className={`${styles.tabCount} num`}>{recursosData.length}</span>
+              </button>
+            </nav>
+          </header>
+
+          {view === 'chat' ? (
+            <div key="chat" className={styles.chat}>
+              <div className={styles.messages}>
+                {messages.length === 0 ? (
+                  <div className={styles.welcome}>
+                    <span className={styles.welcomeBadge}>
+                      <Icon name="sparkle" size={13} strokeWidth={2} />
+                      Asistente de cátedra
+                    </span>
+                    <h2 className={styles.welcomeTitle}>
+                      ¿Qué preparamos hoy, <span className={styles.gradText}>Prof. Dorigatti</span>?
+                    </h2>
+                    <p className={styles.welcomeText}>
+                      Planificá clases, generá actividades, casos de estudio o bibliografía para{' '}
+                      <strong>Gestión de Procesos de Negocio</strong>. Las respuestas se basan exclusivamente
+                      en la documentación de tu base de conocimiento.
+                    </p>
+                    <ul className={styles.suggestions}>
+                      {chatData.sugerencias.map((s, i) => {
+                        const look = SUGGESTION_STYLE[i % SUGGESTION_STYLE.length]
+                        return (
+                          <li key={i}>
+                            <button
+                              id={`sugerencia-${i}`}
+                              className={`${styles.suggestion} ${styles[`tone-${look.tone}`]}`}
+                              onClick={() => sendMessage(s)}
+                            >
+                              <span className={styles.suggestionIcon}><Icon name={look.icon} size={17} /></span>
+                              <span className={styles.suggestionText}>{s}</span>
+                              <Icon name="arrowRight" size={14} className={styles.suggestionArrow} />
+                            </button>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                ) : (
+                  <div className={styles.thread}>
+                    {messages.map((msg, idx) => (
+                      msg.role === 'user' ? (
+                        <div key={idx} className={styles.userMsg}>
+                          <div className={styles.userBubble}>{msg.text}</div>
+                        </div>
+                      ) : (
+                        <div key={idx} className={`${styles.assistantMsg} ${msg.error ? styles.errorMsg : ''}`}>
+                          <div className={styles.assistantHead}><CoraMark /> CoraIA</div>
+                          <div className={styles.assistantBody}>
+                            {msg.error ? (
+                              <div className={styles.errorInner}>
+                                <Icon name="alert" size={18} />
+                                <div><RichText text={msg.text} /></div>
+                              </div>
+                            ) : (
+                              <RichText text={msg.text} />
+                            )}
+                          </div>
+                        </div>
+                      )
+                    ))}
+
+                    {isTyping && (
+                      <div className={styles.assistantMsg} aria-live="polite">
+                        <div className={styles.assistantHead}>
+                          <CoraMark /> CoraIA
+                          <span className={styles.typing}>
+                            <span /><span /><span />
+                          </span>
+                          <span className="visually-hidden">El asistente está escribiendo</span>
+                        </div>
+                        <div className={`${styles.assistantBody} ${styles.skeleton}`} aria-hidden="true">
+                          <span /><span /><span />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+
+              <div className={styles.composerWrap}>
+                <div className={styles.composer}>
+                  <label htmlFor="chat-input" className="visually-hidden">Escribí tu consulta</label>
+                  <textarea
+                    id="chat-input"
+                    ref={inputRef}
+                    rows={1}
+                    className={styles.chatInput}
+                    placeholder="Escribí tu consulta sobre Gestión de Procesos de Negocio…"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <button
+                    id="chat-send"
+                    className={styles.sendBtn}
+                    onClick={() => sendMessage()}
+                    disabled={!input.trim() || isTyping}
+                    aria-label="Enviar"
+                  >
+                    <Icon name="send" size={16} strokeWidth={2.25} />
+                  </button>
+                </div>
+                <p className={styles.inputNote}>
+                  <kbd>Enter</kbd> para enviar · <kbd>Shift</kbd> + <kbd>Enter</kbd> para nueva línea
+                </p>
+              </div>
+            </div>
+          ) : (
+            /* ── Base de conocimiento (vista interna) ── */
+            <div key="kb" className={styles.kbView}>
+              <div className={styles.kbToolbar}>
+                <div className={styles.kbStatsRow}>
+                  <span className={styles.kbStat}><b className="num">{recursosData.length}</b> recursos</span>
+                  <span className={`${styles.kbStat} ${styles.kbStatOk}`}><b className="num">{indexados}</b> indexados</span>
+                  {procesando > 0 && (
+                    <span className={`${styles.kbStat} ${styles.kbStatBusy}`}><b className="num">{procesando}</b> procesando</span>
+                  )}
+                </div>
+                <div className={styles.kbActions}>
+                  <div className={`search ${styles.kbSearch}`}>
+                    <Icon name="search" />
+                    <input
+                      type="search"
+                      className="field"
+                      placeholder="Buscar recurso"
+                      aria-label="Buscar recurso"
+                      value={kbQuery}
+                      onChange={(e) => setKbQuery(e.target.value)}
+                    />
+                  </div>
+                  <input ref={uploadRef} type="file" className="visually-hidden" tabIndex={-1} onChange={handleUpload} />
+                  <button id="kb-upload-btn" className="btn btn-primary" onClick={() => uploadRef.current?.click()}>
+                    <Icon name="upload" />
+                    Subir recurso
+                  </button>
+                </div>
+              </div>
+
+              {recursosFiltrados.length > 0 ? (
+                <ul className={styles.kbGrid}>
+                  {recursosFiltrados.map((recurso) => {
+                    const processing = recurso.estado !== 'Indexado'
+                    return (
+                      <li key={recurso.id} className={styles.kbCard}>
+                        <span className={styles.ext} style={EXT_COLOR[recurso.extension] || EXT_COLOR.default} aria-hidden="true">
+                          {recurso.extension.toUpperCase().slice(0, 4)}
+                        </span>
+                        <div className={styles.kbInfo}>
+                          <p className={styles.kbName} title={recurso.nombre}>{recurso.nombre}</p>
+                          <p className={styles.kbMeta}>
+                            {processing ? (
+                              <span className={styles.kbProcessing}><span className={styles.pulse} />Procesando…</span>
+                            ) : (
+                              <>{recurso.tamano} · {recurso.fecha}</>
+                            )}
+                          </p>
+                          {processing && <span className={styles.kbProgress} aria-hidden="true"><span /></span>}
+                        </div>
+                        {!processing && (
+                          <span className={styles.kbOk} title="Indexado">
+                            <Icon name="check" size={13} strokeWidth={2.5} />
+                            <span className="visually-hidden">Indexado</span>
+                          </span>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ul>
+              ) : (
+                <p className={styles.kbEmpty}>No hay recursos que coincidan con «{kbQuery}».</p>
+              )}
+            </div>
+          )}
+        </section>
+
+        {panel && <div className={styles.scrim} onClick={() => setPanel(null)} />}
       </div>
     </div>
   )

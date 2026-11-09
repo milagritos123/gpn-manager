@@ -1,96 +1,88 @@
 import CategoryBadge from './CategoryBadge'
 import StatusBadge from './StatusBadge'
+import Icon from '../ui/Icon'
+import { groupColor } from '../ui/groupColor'
 import styles from './TPTable.module.css'
 
-const GROUP_COLORS = ['#7C3AED', '#2563EB', '#059669', '#D97706', '#BE185D']
-
-function GroupBadge({ num }) {
-  const color = GROUP_COLORS[(num - 1) % GROUP_COLORS.length]
-  return (
-    <span className={styles.groupBadge} style={{ backgroundColor: color }}>
-      {num}
-    </span>
-  )
+const NOTA_COLOR = {
+  'Regular': 'var(--cat-regular)',
+  'Bueno': 'var(--cat-bueno)',
+  'Muy Bueno': 'var(--cat-muybueno)',
+  'Excelente': 'var(--cat-excelente)',
 }
 
 function TPTable({ trabajos, onVerDetalle }) {
+  const onRowKey = (e, tp) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onVerDetalle(tp)
+    }
+  }
+
   return (
-    <div className={styles.tableWrapper}>
-      <table className={styles.table}>
-        <thead className={styles.thead}>
+    <div className="table-scroll">
+      <table className="data-table">
+        <thead>
           <tr>
-            <th className={styles.th}>Grupo</th>
-            <th className={styles.th}>Fecha</th>
-            <th className={styles.th}>Trabajo Práctico</th>
-            <th className={styles.th}>Nota</th>
-            <th className={styles.th}>Categoría</th>
-            <th className={styles.th}>Estado</th>
-            <th className={styles.th}></th>
+            <th>Grupo</th>
+            <th>Trabajo práctico</th>
+            <th className="is-num">Nota IA</th>
+            <th>Categoría</th>
+            <th>Estado</th>
+            <th><span className="visually-hidden">Acción</span></th>
           </tr>
         </thead>
         <tbody>
           {trabajos.length === 0 ? (
-            <tr className={styles.emptyRow}>
-              <td colSpan={7}>No se encontraron resultados para los filtros aplicados.</td>
+            <tr className="empty">
+              <td colSpan={6}>No hay trabajos que coincidan con los filtros aplicados.</td>
             </tr>
           ) : (
-            trabajos.map((tp) => (
-              <tr
-                key={tp.id}
-                className={styles.tr}
-                onClick={() => onVerDetalle(tp)}
-                style={{ cursor: 'pointer' }}
-              >
-                {/* Grupo */}
-                <td className={styles.td}>
-                  <div className={styles.groupCell}>
-                    <GroupBadge num={tp.grupoNum} />
-                    <div className={styles.groupInfo}>
-                      <span className={styles.groupName}>{tp.grupoLabel}</span>
-                      <span className={styles.groupMembers}>
-                        {tp.integrantes.join(' · ')}
-                      </span>
+            trabajos.map((tp) => {
+              const pendiente = tp.estado === 'Pendiente'
+              return (
+                <tr
+                  key={tp.id}
+                  className="is-clickable"
+                  tabIndex={0}
+                  onClick={() => onVerDetalle(tp)}
+                  onKeyDown={(e) => onRowKey(e, tp)}
+                >
+                  <td>
+                    <div className={styles.group}>
+                      <span className={`${styles.groupNum} num`} style={groupColor(tp.grupoNum)}>G{tp.grupoNum}</span>
+                      <div className={styles.groupInfo}>
+                        <div className="cell-primary">{tp.grupoLabel}</div>
+                        <div className={`cell-secondary ${styles.members}`} title={tp.integrantes.join(', ')}>
+                          {tp.integrantes.join(' · ')}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </td>
-
-                {/* Fecha */}
-                <td className={styles.td}>{tp.fecha}</td>
-
-                {/* TP */}
-                <td className={styles.td}>{tp.tp}</td>
-
-                {/* Nota */}
-                <td className={styles.td}>
-                  <span className={styles.nota}>{tp.nota}</span>
-                </td>
-
-                {/* Categoría */}
-                <td className={styles.td}>
-                  <CategoryBadge categoria={tp.categoria} />
-                </td>
-
-                {/* Estado */}
-                <td className={styles.td}>
-                  <StatusBadge estado={tp.estado} />
-                </td>
-
-                {/* Acción */}
-                <td className={styles.td} onClick={(e) => e.stopPropagation()}>
-                  <button
-                    id={`ver-tp-${tp.id}`}
-                    className={styles.viewBtn}
-                    onClick={() => onVerDetalle(tp)}
-                    title="Ver detalle"
-                  >
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-            ))
+                  </td>
+                  <td>
+                    <div>{tp.tp}</div>
+                    <div className="cell-secondary">Entregado el {tp.fecha}</div>
+                  </td>
+                  <td className="is-num">
+                    <span className={styles.nota} style={{ color: NOTA_COLOR[tp.categoria] }}>{tp.nota}</span>
+                    <span className={styles.notaMax}>/10</span>
+                  </td>
+                  <td><CategoryBadge categoria={tp.categoria} /></td>
+                  <td><StatusBadge estado={tp.estado} /></td>
+                  <td className={styles.actionCell}>
+                    <button
+                      id={`ver-tp-${tp.id}`}
+                      className={`btn btn-sm ${pendiente ? 'btn-secondary' : 'btn-ghost'}`}
+                      onClick={(e) => { e.stopPropagation(); onVerDetalle(tp) }}
+                      tabIndex={-1}
+                    >
+                      {pendiente ? 'Revisar' : 'Ver'}
+                      <Icon name="arrowRight" />
+                    </button>
+                  </td>
+                </tr>
+              )
+            })
           )}
         </tbody>
       </table>

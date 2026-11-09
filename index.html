@@ -5,15 +5,55 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/jpeg" href="/logo.jpg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6334C8" />
   <meta name="description"
     content="CoraIA: Sistema de corrección inteligente de trabajos prácticos con agente de IA" />
   <title>CoraIA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..600&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* Splash de carga: CSS puro, se desvanece solo y no bloquea clics */
+    .splash {
+      position: fixed; inset: 0; z-index: 9999;
+      display: grid; place-items: center; align-content: center; gap: 18px;
+      background: radial-gradient(circle at 50% 40%, #7C4AE6 0%, #6334C8 45%, #3F1D7A 100%);
+      animation: splash-out .45s cubic-bezier(.2,0,0,1) 1.25s forwards;
+    }
+    .splash__logo {
+      position: relative; width: 120px; height: 120px; padding: 16px; border-radius: 30px; overflow: hidden;
+      background: #fff;
+      box-shadow: 0 20px 50px rgba(20, 6, 50, .45), 0 0 0 8px rgba(255,255,255,.12);
+      animation: splash-pop .6s cubic-bezier(.34,1.56,.64,1) .1s backwards;
+    }
+    .splash__logo img { width: 100%; height: 100%; display: block; object-fit: contain; }
+    .splash__logo::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%);
+      transform: translateX(-120%);
+      animation: splash-shine .9s ease .55s forwards;
+    }
+    .splash__name {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: #fff;
+      animation: splash-rise .5s cubic-bezier(.2,0,0,1) .35s backwards;
+    }
+    .splash__name span { color: #D8CCF5; margin-left: 1px; }
+    @keyframes splash-pop { from { opacity: 0; transform: scale(.7); } }
+    @keyframes splash-rise { from { opacity: 0; transform: translateY(10px); } }
+    @keyframes splash-shine { to { transform: translateX(120%); } }
+    @keyframes splash-out { to { opacity: 0; visibility: hidden; } }
+    @media (prefers-reduced-motion: reduce) { .splash { display: none; } }
+  </style>
 </head>
 
 <body>
+  <div class="splash" aria-hidden="true">
+    <div class="splash__logo"><img src="/logo.jpg" alt="" /></div>
+    <div class="splash__name">Cora<span>IA</span></div>
+  </div>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>

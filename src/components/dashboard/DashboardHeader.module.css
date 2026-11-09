@@ -1,26 +1,64 @@
+/* Banner de bienvenida con el degradado de la marca */
 .header {
-  margin-bottom: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  padding: var(--space-7) var(--space-8);
+  border-radius: var(--radius-xl);
+  background: var(--grad-brand);
+  box-shadow: 0 12px 32px rgba(99, 52, 200, 0.28);
+  color: #fff;
+  isolation: isolate;
 }
 
-.date {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  font-weight: 500;
-  margin-bottom: var(--space-2);
-  text-transform: capitalize;
+/* Decoración abstracta: anillos y nodos tipo circuito, en homenaje al logo */
+.header::before,
+.header::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
 }
 
-.welcome {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--color-text-primary);
-  letter-spacing: -0.5px;
-  line-height: 1.15;
-  margin-bottom: 6px;
+.header::before {
+  right: -60px;
+  top: -90px;
+  width: 280px;
+  height: 280px;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 0 0 28px rgba(255, 255, 255, 0.05),
+    0 0 0 58px rgba(255, 255, 255, 0.04);
+  animation: drift 14s ease-in-out infinite alternate;
 }
 
-.subtitle {
-  font-size: 13.5px;
-  color: var(--color-text-secondary);
-  font-weight: 400;
+.header::after {
+  right: 210px;
+  bottom: 18px;
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    46px -38px 0 -1px rgba(255, 255, 255, 0.35),
+    -64px -22px 0 -2px rgba(255, 255, 255, 0.3),
+    120px 6px 0 -3px rgba(255, 255, 255, 0.25);
+  animation: twinkle 3.2s ease-in-out infinite alternate;
+}
+
+.header { border: none; }
+.header :global(.eyebrow) { color: rgba(255, 255, 255, 0.8); }
+.header :global(.eyebrow)::before { background: rgba(255, 255, 255, 0.7); }
+
+.title {
+  margin-top: var(--space-1);
+  color: #fff !important;
+}
+
+@keyframes drift { to { transform: translate(-18px, 14px) rotate(8deg); } }
+@keyframes twinkle { from { opacity: 0.45; } to { opacity: 1; } }
+
+@media (max-width: 640px) {
+  .header { padding: var(--space-6) var(--space-5); }
+  .header::after { display: none; }
 }

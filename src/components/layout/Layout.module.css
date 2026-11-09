@@ -1,20 +1,27 @@
-.layout {
+.shell {
   display: flex;
+  flex-direction: column;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
 .main {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  background-color: var(--color-bg);
 }
 
+/* Secciones que gestionan su propio scroll interno (tablas, chat) */
 .mainFull {
   flex: 1;
+  min-height: 0;
   overflow: hidden;
-  background-color: var(--color-bg);
   display: flex;
   flex-direction: column;
 }
 
+/* En pantallas bajas o angostas, el scroll interno no alcanza: se vuelve al scroll de página */
+@media (max-width: 760px), (max-height: 620px) {
+  .mainFull { overflow-y: auto; display: block; }
+}

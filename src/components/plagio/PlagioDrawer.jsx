@@ -1,9 +1,47 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ResultCard from './ResultCard'
 import FragmentosSimilares from './FragmentosSimilares'
+import Icon from '../ui/Icon'
+import { useToast } from '../ui/Toast'
+import { ESTADO, needsDecision } from './risk'
 import styles from './PlagioDrawer.module.css'
 
+export function usePlagioDecision(analisis, onDone) {
+  const notify = useToast()
+  return (action) => {
+    const messages = {
+      aprobar: ['Trabajo aprobado', 'success'],
+      revision: ['Revisión solicitada al grupo', 'info'],
+      rechazar: ['Trabajo rechazado', 'danger'],
+    }
+    const [message, tone] = messages[action]
+    notify(message, { detail: analisis.archivo, tone })
+    onDone?.()
+  }
+}
+
+export function DecisionButtons({ onDecide }) {
+  return (
+    <>
+      <button id="btn-rechazar" className="btn btn-danger" onClick={() => onDecide('rechazar')}>
+        Rechazar
+      </button>
+      <span className="spacer" />
+      <button id="btn-revision" className="btn btn-secondary" onClick={() => onDecide('revision')}>
+        Solicitar revisión
+      </button>
+      <button id="btn-aprobar" className="btn btn-primary" onClick={() => onDecide('aprobar')}>
+        <Icon name="check" strokeWidth={2.25} />
+        Aprobar trabajo
+      </button>
+    </>
+  )
+}
+
 function PlagioDrawer({ analisis, onClose }) {
+  const [observaciones, setObservaciones] = useState('')
+  const decide = usePlagioDecision(analisis, onClose)
+
   useEffect(() => {
     const handleKey = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', handleKey)
@@ -12,30 +50,50 @@ function PlagioDrawer({ analisis, onClose }) {
 
   if (!analisis) return null
 
+  const estado = ESTADO[analisis.estado] || ESTADO.Pendiente
+  const pending = needsDecision(analisis.estado)
+
   return (
     <>
-      <div className={styles.overlay} onClick={onClose} />
-      <aside id="plagio-drawer" className={styles.drawer}>
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>
-            <h1 className={styles.fileName}>{analisis.archivo}</h1>
-            <p className={styles.meta}>{analisis.autor} · {analisis.carrera} · {analisis.fecha}</p>
+      <div className="drawer-overlay" onClick={onClose} />
+      <aside id="plagio-drawer" className="drawer" role="dialog" aria-modal="true" aria-labelledby="plagio-drawer-title">
+        <div className="drawer-header">
+          <div className="drawer-header-top">
+            <span className={`tag tag--${estado.tone}`}>{estado.label}</span>
+            <button className="btn btn-icon" onClick={onClose} id="plagio-drawer-close" aria-label="Cerrar">
+              <Icon name="close" size={18} />
+            </button>
           </div>
-          <button className={styles.closeBtn} onClick={onClose} id="plagio-drawer-close">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
+          <h2 id="plagio-drawer-title" className="drawer-title">{analisis.archivo}</h2>
+          <p className="drawer-meta">{analisis.grupo} · Analizado el {analisis.fecha}</p>
         </div>
 
-        <div className={styles.body}>
-          <ResultCard analisis={analisis} />
-          <FragmentosSimilares
-            fragmentos={analisis.fragmentos}
-            coincidencias={analisis.coincidencias}
-          />
+        <div className="drawer-body">
+          <section className="drawer-section">
+            <ResultCard analisis={analisis} showFile={false} />
+          </section>
+          <section className="drawer-section">
+            <FragmentosSimilares fragmentos={analisis.fragmentos} coincidencias={analisis.coincidencias} />
+          </section>
+          {pending && (
+            <section className={`drawer-section ${styles.decision}`}>
+              <label htmlFor="plagio-obs" className="drawer-section-title">Observaciones de la docente</label>
+              <textarea
+                id="plagio-obs"
+                className="field"
+                placeholder="Registrá el criterio de tu decisión (opcional)."
+                value={observaciones}
+                onChange={(e) => setObservaciones(e.target.value)}
+              />
+            </section>
+          )}
         </div>
+
+        {pending && (
+          <div className="drawer-footer">
+            <DecisionButtons onDecide={decide} />
+          </div>
+        )}
       </aside>
     </>
   )

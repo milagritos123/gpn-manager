@@ -1,89 +1,89 @@
+import { useState } from 'react'
+import Icon from '../ui/Icon'
+import { SimilarityCell } from './FragmentosSimilares'
+import { RISK, ESTADO, needsDecision } from './risk'
 import styles from './HistorialPlagio.module.css'
 
-const RISK_CFG = {
-  Alto:  { badgeCls: styles.riskAlto,  simCls: styles.simAlto,  dot: '#EF4444', label: 'Alto riesgo' },
-  Medio: { badgeCls: styles.riskMedio, simCls: styles.simMedio, dot: '#F59E0B', label: 'Riesgo medio' },
-  Bajo:  { badgeCls: styles.riskBajo,  simCls: styles.simBajo,  dot: '#10B981', label: 'Bajo riesgo' },
-}
-
-const ESTADO_CFG = {
-  Pendiente: { cls: styles.estadoPendiente, icon: '⏱' },
-  Revisión:  { cls: styles.estadoRevision,  icon: '⚠' },
-  Aprobado:  { cls: styles.estadoAprobado,  icon: '✓' },
-  Rechazado: { cls: styles.estadoRechazado, icon: '✕' },
-}
-
 function HistorialPlagio({ historial, onVer }) {
+  const [soloPendientes, setSoloPendientes] = useState(false)
+  const pendientes = historial.filter((h) => needsDecision(h.estado))
+  const rows = soloPendientes ? pendientes : historial
+
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Historial de análisis</h2>
-        <p className={styles.subtitle}>{historial.length} análisis realizados</p>
+    <section className="panel" aria-labelledby="historial-title">
+      <header className={styles.header}>
+        <div>
+          <h2 id="historial-title" className="section-title">Historial de análisis</h2>
+          <p className={styles.subtitle}>{historial.length} TFI analizados</p>
+        </div>
+        <div className="segmented" role="group" aria-label="Filtrar historial">
+          <button aria-pressed={!soloPendientes} onClick={() => setSoloPendientes(false)}>
+            Todos <span className="count">{historial.length}</span>
+          </button>
+          <button aria-pressed={soloPendientes} onClick={() => setSoloPendientes(true)}>
+            Requieren decisión <span className="count">{pendientes.length}</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="table-scroll">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Documento</th>
+              <th>Fecha</th>
+              <th>Similitud</th>
+              <th>Riesgo</th>
+              <th>Estado</th>
+              <th><span className="visually-hidden">Acción</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((item) => {
+              const risk = RISK[item.riesgo] || RISK.Bajo
+              const estado = ESTADO[item.estado] || ESTADO.Pendiente
+              const open = () => onVer(item)
+              return (
+                <tr
+                  key={item.id}
+                  className="is-clickable"
+                  tabIndex={0}
+                  onClick={open}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open() } }}
+                >
+                  <td>
+                    <div className={styles.doc}>
+                      <Icon name="file" size={16} className={styles.docIcon} />
+                      <div>
+                        <div className="cell-primary">{item.archivo}</div>
+                        <div className="cell-secondary">{item.grupo} · Cursada {item.anio}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{item.fecha}</td>
+                  <td><SimilarityCell value={item.similitud} riesgo={item.riesgo} /></td>
+                  <td><span className={`tag tag--${risk.tone}`}>{risk.label}</span></td>
+                  <td>
+                    <span className={`tag tag--plain tag--${estado.tone}`}>{estado.label}</span>
+                  </td>
+                  <td className={styles.actionCell}>
+                    <button
+                      id={`ver-analisis-${item.id}`}
+                      className={`btn btn-sm ${needsDecision(item.estado) ? 'btn-secondary' : 'btn-ghost'}`}
+                      onClick={(e) => { e.stopPropagation(); open() }}
+                      tabIndex={-1}
+                    >
+                      {needsDecision(item.estado) ? 'Revisar' : 'Ver'}
+                      <Icon name="arrowRight" />
+                    </button>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
       </div>
-      <table className={styles.table}>
-        <thead className={styles.thead}>
-          <tr>
-            <th className={styles.th}>Documento</th>
-            <th className={styles.th}>Fecha</th>
-            <th className={styles.th}>Grupo</th>
-            <th className={styles.th}>Año</th>
-            <th className={styles.th}>Similitud</th>
-            <th className={styles.th}>Riesgo</th>
-            <th className={styles.th}>Estado</th>
-            <th className={styles.th}></th>
-          </tr>
-        </thead>
-        <tbody>
-          {historial.map((item) => {
-            const risk = RISK_CFG[item.riesgo] || RISK_CFG.Bajo
-            const estado = ESTADO_CFG[item.estado] || ESTADO_CFG.Pendiente
-            return (
-              <tr key={item.id} className={styles.tr}>
-                <td className={styles.td}>
-                  <div className={styles.docCell}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                    </svg>
-                    <span className={styles.docName} title={item.archivo}>{item.archivo}</span>
-                  </div>
-                </td>
-                <td className={styles.td}>{item.fecha}</td>
-                <td className={styles.td}>{item.grupo}</td>
-                <td className={styles.td}>{item.anio}</td>
-                <td className={styles.td}>
-                  <span className={risk.simCls}>{item.similitud}%</span>
-                </td>
-                <td className={styles.td}>
-                  <span className={`${styles.riskBadge} ${risk.badgeCls}`}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: risk.dot, display: 'inline-block' }} />
-                    {risk.label}
-                  </span>
-                </td>
-                <td className={styles.td}>
-                  <span className={`${styles.estadoBadge} ${estado.cls}`}>
-                    {estado.icon} {item.estado}
-                  </span>
-                </td>
-                <td className={styles.td}>
-                  <button
-                    id={`ver-analisis-${item.id}`}
-                    className={styles.viewBtn}
-                    onClick={() => onVer(item)}
-                    title="Ver análisis"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </div>
+    </section>
   )
 }
 

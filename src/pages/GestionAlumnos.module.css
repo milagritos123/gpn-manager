@@ -1,236 +1,78 @@
-.page {
-  padding: var(--space-6) var(--space-8);
+.tablePanel {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-  height: 100%;
-  box-sizing: border-box;
   overflow: hidden;
 }
 
-.pageHeader { display: flex; flex-direction: column; gap: var(--space-1); }
-.pageTitle { font-size: 24px; font-weight: 800; color: var(--color-text-primary); letter-spacing: -0.4px; }
-.pageSubtitle { font-size: 13.5px; color: var(--color-text-secondary); }
-
-/* Filter bar */
-.filterSection {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4) var(--space-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  box-shadow: var(--shadow-sm);
-}
-
-.filterTitle {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.filterRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
-.searchWrapper {
-  position: relative;
-  flex: 1;
-  min-width: 200px;
-}
-
-.searchIcon {
-  position: absolute;
-  left: 11px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-text-muted);
-  pointer-events: none;
-}
-
-.searchInput {
-  width: 100%;
-  padding: 9px 12px 9px 34px;
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  font-family: inherit;
-  color: var(--color-text-primary);
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.searchInput:focus { border-color: var(--color-primary); }
-.searchInput::placeholder { color: var(--color-text-muted); }
-
-.select {
-  padding: 9px 32px 9px 12px;
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  font-family: inherit;
-  color: var(--color-text-primary);
-  background: var(--color-surface);
-  outline: none;
-  cursor: pointer;
-  appearance: auto;
-  min-width: 160px;
-}
-
-.select:focus { border-color: var(--color-primary); }
-
-.clearBtn {
-  padding: 9px var(--space-4);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  font-family: inherit;
-  color: var(--color-text-secondary);
-  background: transparent;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.15s;
-}
-
-.clearBtn:hover { background-color: var(--color-bg); }
-
-/* Table */
-.tableWrapper {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
-  overflow-y: auto;
-  flex: 1;
-  min-height: 0;
-}
-
-.tableWrapper::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.tableWrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.tableWrapper::-webkit-scrollbar-thumb {
-  background-color: var(--color-border);
-  border-radius: 3px;
-}
-
-.tableWrapper::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-text-muted);
-}
-
-.table { width: 100%; border-collapse: collapse; }
-
-.thead {
-  background-color: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.th {
-  padding: 12px var(--space-4);
-  text-align: left;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-  position: sticky;
-  top: 0;
-  background-color: var(--color-bg);
-  z-index: 2;
-  box-shadow: inset 0 -1px 0 var(--color-border);
-}
-
-.tr {
-  border-bottom: 1px solid var(--color-border-light);
-  transition: background-color 0.12s;
-}
-
-.tr:last-child { border-bottom: none; }
-.tr:hover { background-color: var(--color-primary-lighter); }
-
-.td {
-  padding: 14px var(--space-4);
-  font-size: 13px;
-  color: var(--color-text-primary);
-  white-space: nowrap;
-}
-
-/* Student cell */
-.studentCell {
+.student {
   display: flex;
   align-items: center;
   gap: var(--space-3);
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  color: white;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+  transition: transform var(--dur) var(--ease-spring);
 }
 
-.studentName { font-weight: 600; }
+:global(.is-clickable):hover .avatar { transform: scale(1.08); }
 
-/* Estado badges */
-.estadoBadge {
+.groupChip {
+  font-family: var(--font-display);
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
+  height: 24px;
+  padding: 0 10px;
   border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--text-xs);
+  font-weight: 700;
 }
 
-.estadoActivo    { background: #ECFDF5; color: #059669; }
-.estadoEnRiesgo  { background: #FFFBEB; color: #B45309; }
-.estadoIrregular { background: #FEF2F2; color: #DC2626; }
-
-/* View btn */
-.viewBtn {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-md);
-  display: flex;
+.pips {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  transition: background-color 0.15s, color 0.15s;
-  background: none;
-  border: none;
+  gap: 3px;
 }
 
-.viewBtn:hover {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
+.pips i {
+  width: 14px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--line);
+  transform-origin: left;
+  animation: grow-x var(--dur) var(--ease) 150ms backwards;
 }
 
-/* Empty row */
-.emptyRow td {
-  text-align: center;
-  padding: var(--space-8) var(--space-4);
-  color: var(--color-text-muted);
-  font-size: 13px;
+.pips i:nth-child(2) { animation-delay: 190ms; }
+.pips i:nth-child(3) { animation-delay: 230ms; }
+.pips i:nth-child(4) { animation-delay: 270ms; }
+.pips i:nth-child(n+5) { animation-delay: 310ms; }
+
+.pips i.pipOn { background: var(--grad-brand); }
+
+.pipText {
+  margin-left: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ink-2);
 }
+
+.prom {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 800;
+}
+
+.actionCell { text-align: right; width: 1%; }

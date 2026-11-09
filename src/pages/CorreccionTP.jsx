@@ -5,10 +5,20 @@ import TPDrawer from '../components/correccion/TPDrawer'
 import trabajosData from '../data/trabajosGrupales.json'
 import styles from './CorreccionTP.module.css'
 
-const INITIAL_FILTERS = { search: '', categoria: '', estado: '' }
+const EMPTY_FILTERS = { search: '', categoria: '', estado: '' }
+const CATEGORIAS = ['Regular', 'Bueno', 'Muy Bueno', 'Excelente']
 
-function CorreccionTP() {
-  const [filters, setFilters] = useState(INITIAL_FILTERS)
+const countBy = (key, value) => trabajosData.filter((tp) => tp[key] === value).length
+
+const STATUS_OPTIONS = [
+  { value: '', label: 'Todos', count: trabajosData.length },
+  { value: 'Pendiente', label: 'Pendientes', count: countBy('estado', 'Pendiente') },
+  { value: 'Aceptado', label: 'Aceptados', count: countBy('estado', 'Aceptado') },
+  { value: 'Rechazado', label: 'Rechazados', count: countBy('estado', 'Rechazado') },
+]
+
+function CorreccionTP({ initialFilters }) {
+  const [filters, setFilters] = useState({ ...EMPTY_FILTERS, ...initialFilters })
   const [selectedTP, setSelectedTP] = useState(null)
 
   const handleFilterChange = (key, value) => {
@@ -34,22 +44,30 @@ function CorreccionTP() {
   }, [filters])
 
   return (
-    <div className={styles.page}>
-      <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>Corrección Inteligente de Trabajos Prácticos</h1>
-        <p className={styles.pageSubtitle}>
-          Revisión de correcciones automáticas realizadas por el agente de IA
-        </p>
-      </div>
+    <div className="page page--fill">
+      <header className="page-header">
+        <div>
+          <h1 className="page-title">Corrección de TP</h1>
+          <p className="page-lede">
+            Revisá las correcciones que el agente de IA hizo sobre cada entrega. Ninguna nota se publica sin tu confirmación.
+          </p>
+        </div>
+      </header>
 
       <FilterBar
         filters={filters}
         onFilterChange={handleFilterChange}
-        onClear={() => setFilters(INITIAL_FILTERS)}
-        searchPlaceholder="Buscar grupo o integrante..."
+        onClear={() => setFilters(EMPTY_FILTERS)}
+        searchPlaceholder="Buscar grupo o integrante"
+        statusKey="estado"
+        statusOptions={STATUS_OPTIONS}
+        selects={[{ key: 'categoria', placeholder: 'Todas las categorías', options: CATEGORIAS }]}
+        resultCount={filteredTrabajos.length}
       />
 
-      <TPTable trabajos={filteredTrabajos} onVerDetalle={setSelectedTP} />
+      <div className={`panel ${styles.tablePanel}`}>
+        <TPTable trabajos={filteredTrabajos} onVerDetalle={setSelectedTP} />
+      </div>
 
       {selectedTP && (
         <TPDrawer tp={selectedTP} onClose={() => setSelectedTP(null)} />

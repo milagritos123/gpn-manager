@@ -1,78 +1,196 @@
 import { useState, useEffect } from 'react'
-import CategoryBadge from './CategoryBadge'
 import StatusBadge from './StatusBadge'
+import Icon from '../ui/Icon'
+import { useToast } from '../ui/Toast'
 import styles from './TPDrawer.module.css'
 
-/* ── Icon helpers ── */
-const IconDoc = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="16" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-  </svg>
-)
+const TABS = [
+  { id: 'evaluacion', label: 'Evaluación' },
+  { id: 'documento', label: 'Documento' },
+  { id: 'decision', label: 'Tu decisión' },
+]
 
-const IconAI = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
-    <circle cx="12" cy="12" r="10" />
-    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-    <line x1="12" y1="17" x2="12.01" y2="17" />
-  </svg>
-)
+const categoryTone = {
+  'Regular': 'var(--cat-regular)',
+  'Bueno': 'var(--cat-bueno)',
+  'Muy Bueno': 'var(--cat-muybueno)',
+  'Excelente': 'var(--cat-excelente)',
+}
 
-const IconError = () => (
-  <svg className={styles.listIcon} viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2.5">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="15" y1="9" x2="9" y2="15" />
-    <line x1="9" y1="9" x2="15" y2="15" />
-  </svg>
-)
+const pad = (n) => String(n).padStart(2, '0')
 
-const IconCheck = () => (
-  <svg className={styles.listIcon} viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5">
-    <polyline points="20 6 9 17 4 12" />
-  </svg>
-)
+/* ── 01 · Evaluación ── */
+function EvaluacionTab({ tp }) {
+  const errores = tp.errores ?? []
+  const recomendaciones = tp.recomendaciones ?? []
+  const fortalezas = tp.fortalezas ?? []
+  const filas = Math.max(errores.length, recomendaciones.length)
 
-const IconTip = () => (
-  <svg className={styles.listIcon} viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2.5">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="12" y1="8" x2="12" y2="12" />
-    <line x1="12" y1="16" x2="12.01" y2="16" />
-  </svg>
-)
-
-const IconNote = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-  </svg>
-)
-
-const IconObs = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2">
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-  </svg>
-)
-
-function SectionTitle({ icon, title }) {
   return (
-    <div className={styles.sectionHeader}>
-      {icon}
-      <h3 className={styles.sectionTitle}>{title}</h3>
+    <div className={styles.pane}>
+      <h3 className={styles.blockTitle}>
+        <Icon name="sparkle" className={styles.iconViolet} />
+        Evaluación del agente de IA
+      </h3>
+      <blockquote className={styles.aiSummary}>{tp.comentariosIA}</blockquote>
+
+      {filas > 0 && (
+        <div className={styles.matrix}>
+          <div className={styles.matrixHead}>
+            <span>Errores encontrados · {errores.length}</span>
+            <span className={styles.headViolet}>Recomendaciones de mejora · {recomendaciones.length}</span>
+          </div>
+          {Array.from({ length: filas }, (_, i) => (
+            <div key={i} className={styles.matrixRow}>
+              <div className={styles.cell}>
+                {errores[i] && (
+                  <>
+                    <span className={`${styles.errIndex} num`}>{pad(i + 1)}</span>
+                    <p>{errores[i]}</p>
+                  </>
+                )}
+              </div>
+              <div className={styles.cell}>
+                {recomendaciones[i] && (
+                  <>
+                    <Icon name="arrowRight" size={14} className={styles.iconViolet} />
+                    <p>{recomendaciones[i]}</p>
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <h3 className={styles.blockTitle}>
+        <Icon name="checkCircle" className={styles.iconGreen} />
+        Fortalezas · {fortalezas.length}
+      </h3>
+      {fortalezas.length > 0 ? (
+        <ul className={styles.strengths}>
+          {fortalezas.map((text, i) => (
+            <li key={i}>
+              <Icon name="check" size={14} strokeWidth={2.25} className={styles.iconGreen} />
+              {text}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className={styles.empty}>No se detectaron fortalezas.</p>
+      )}
+    </div>
+  )
+}
+
+/* ── 02 · Documento ── */
+function DocumentoTab({ tp }) {
+  return (
+    <div className={styles.pane}>
+      <h2 className={styles.paneTitle}>Documento entregado</h2>
+      <p className={styles.paneSubtitle}>El archivo del grupo está cargado en OneDrive.</p>
+
+      <div className={styles.fileCard}>
+        <span className={styles.fileIcon}><Icon name="file" size={20} /></span>
+        <div className={styles.fileInfo}>
+          <p className={styles.fileName}>{tp.documentoNombre ?? 'Documento entregado'}</p>
+          <p className={styles.fileMeta}>OneDrive · Entregado el {tp.fecha}</p>
+        </div>
+        {tp.documentoUrl ? (
+          <a className="btn btn-primary" href={tp.documentoUrl} target="_blank" rel="noopener noreferrer">
+            Abrir en OneDrive
+            <Icon name="external" />
+          </a>
+        ) : (
+          <span className={styles.empty}>Sin link cargado</span>
+        )}
+      </div>
+
+      {tp.documento && (
+        <>
+          <h3 className={styles.blockTitle}>Extracto</h3>
+          <div className={styles.document}>{tp.documento}</div>
+        </>
+      )}
+    </div>
+  )
+}
+
+/* ── 03 · Tu decisión ── */
+function DecisionTab({ nota, setNota, sugerida, observaciones, setObservaciones }) {
+  const clamp = (v) => Math.min(10, Math.max(0, v))
+  const modificada = nota !== sugerida
+
+  return (
+    <div className={styles.pane}>
+      <h2 className={styles.paneTitle}>Tu decisión</h2>
+      <p className={styles.paneSubtitle}>Revisá la nota final y sumá tus observaciones para el grupo.</p>
+
+      <div className={styles.decisionBox}>
+        <div className={styles.gradeCard}>
+          <div>
+            <label htmlFor="nota-sugerida-input" className={styles.gradeLabel}>Nota final</label>
+            <p className={styles.gradeHint}>
+              {modificada ? (
+                <>
+                  Modificada · la IA sugirió <b className="num">{sugerida}</b>{' '}
+                  <button className="link" onClick={() => setNota(sugerida)}>Restablecer</button>
+                </>
+              ) : (
+                'Sugerida por la IA'
+              )}
+            </p>
+          </div>
+          <div className={styles.gradeControl}>
+            <div className={styles.stepper}>
+              <button onClick={() => setNota((n) => clamp(n - 1))} aria-label="Bajar nota" disabled={nota <= 0}>−</button>
+              <input
+                id="nota-sugerida-input"
+                type="number"
+                min="0"
+                max="10"
+                className="num"
+                value={nota}
+                onChange={(e) => setNota(clamp(Number(e.target.value)))}
+              />
+              <button onClick={() => setNota((n) => clamp(n + 1))} aria-label="Subir nota" disabled={nota >= 10}>+</button>
+            </div>
+            <span className={styles.outOf}>/ 10</span>
+          </div>
+        </div>
+
+        <label htmlFor="observaciones-docente" className={styles.fieldLabel}>
+          Observaciones para el grupo <span className={styles.optional}>Opcional</span>
+        </label>
+        <textarea
+          id="observaciones-docente"
+          className={`field ${styles.textarea}`}
+          placeholder="Se suman a la devolución de la IA que reciben los alumnos."
+          value={observaciones}
+          onChange={(e) => setObservaciones(e.target.value)}
+        />
+
+        <p className={styles.notice}>
+          <Icon name="shield" />
+          Ninguna nota se publica sin tu confirmación.
+        </p>
+      </div>
     </div>
   )
 }
 
 function TPDrawer({ tp, onClose }) {
-  const [nota, setNota] = useState(tp?.notaSugerida ?? tp?.nota ?? 0)
+  const notify = useToast()
+  const sugerida = tp?.notaSugerida ?? tp?.nota ?? 0
+  const [nota, setNota] = useState(sugerida)
   const [observaciones, setObservaciones] = useState('')
+  const [tab, setTab] = useState(0)
 
   // Reset state when TP changes
   useEffect(() => {
     setNota(tp?.notaSugerida ?? tp?.nota ?? 0)
     setObservaciones('')
+    setTab(0)
   }, [tp?.id])
 
   // Close on Escape
@@ -85,207 +203,113 @@ function TPDrawer({ tp, onClose }) {
   if (!tp) return null
 
   const handleAction = (action) => {
-    alert(`Acción: ${action}`)
+    const messages = {
+      aceptar: [`Corrección aceptada · ${tp.grupoLabel}`, `Nota final ${nota}/10`, 'success'],
+      guardar: ['Cambios guardados como borrador', `${tp.grupoLabel} sigue pendiente de confirmación`, 'info'],
+      rechazar: [`Corrección rechazada · ${tp.grupoLabel}`, 'El trabajo vuelve a revisión manual', 'danger'],
+    }
+    const [message, detail, tone] = messages[action]
+    notify(message, { detail, tone })
+    if (action !== 'guardar') onClose()
   }
 
-  const handleNotaChange = (e) => {
-    const val = Math.min(10, Math.max(0, Number(e.target.value)))
-    setNota(val)
-  }
+  const isLast = tab === TABS.length - 1
 
   return (
     <>
-      {/* Overlay */}
-      <div className={styles.overlay} onClick={onClose} />
+      <div className="drawer-overlay" onClick={onClose} />
 
-      {/* Drawer */}
-      <aside id="tp-drawer" className={styles.drawer}>
-
+      <aside id="tp-drawer" className={`drawer ${styles.drawer}`} role="dialog" aria-modal="true" aria-labelledby="tp-drawer-title">
         {/* ── Header ── */}
         <div className={styles.header}>
           <div className={styles.headerTop}>
-            <div className={styles.badges}>
-              <CategoryBadge category={tp.categoria} />
-              <StatusBadge status={tp.estado} />
-            </div>
-            <button
-              id="drawer-close-btn"
-              className={styles.closeBtn}
-              onClick={onClose}
-              title="Cerrar"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
+            <p className={styles.eyebrow}>Revisión de entrega</p>
+            <button id="drawer-close-btn" className="btn btn-icon" onClick={onClose} aria-label="Cerrar">
+              <Icon name="close" size={18} />
             </button>
           </div>
 
-          <h2 className={styles.studentName}>{tp.grupoLabel}</h2>
+          <div className={styles.headerMain}>
+            <div className={styles.headerInfo}>
+              <div className={styles.groupRow}>
+                <span className={styles.groupLabel}>{tp.grupoLabel}</span>
+                <StatusBadge estado={tp.estado} />
+              </div>
+              <h2 id="tp-drawer-title" className={styles.title}>{tp.tp}</h2>
+              <p className={styles.meta}>Entregado el {tp.fecha}</p>
+              <p className={styles.members}>{tp.integrantes?.join(', ')}</p>
+            </div>
 
-          <div className={styles.tpInfoRow}>
-            <span className={styles.tpInfoPill}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-              </svg>
-              {tp.tp}
-            </span>
+            <div className={styles.scoreBox} style={{ '--cat': categoryTone[tp.categoria] }}>
+              <p className={styles.scoreLabel}>Sugerida por la IA</p>
+              <p className={`${styles.score} num`}>
+                {sugerida}<span> / 10</span>
+              </p>
+              <p className={styles.scoreCat} style={{ color: categoryTone[tp.categoria] }}>{tp.categoria}</p>
+            </div>
           </div>
+        </div>
 
-          {/* Member chips */}
-          <div className={styles.membersRow}>
-            {tp.integrantes?.map((m, i) => (
-              <span key={i} className={styles.memberChip}>{m}</span>
-            ))}
-          </div>
+        {/* ── Tabs ── */}
+        <div className={styles.tabs} role="tablist">
+          {TABS.map((t, i) => (
+            <button
+              key={t.id}
+              role="tab"
+              id={`tp-tab-${t.id}`}
+              aria-selected={tab === i}
+              className={styles.tab}
+              onClick={() => setTab(i)}
+            >
+              <span className={`${styles.tabIndex} num`}>{pad(i + 1)}</span>
+              {t.label}
+            </button>
+          ))}
         </div>
 
         {/* ── Scrollable body ── */}
-        <div className={styles.body}>
-
-          {/* 1. Documento */}
-          <div className={styles.section}>
-            <SectionTitle icon={<IconDoc />} title="Documento completo" />
-            <div className={styles.documentBox}>
-              <p className={styles.documentText}>{tp.documento}</p>
-            </div>
-          </div>
-
-          {/* 2. Comentarios IA */}
-          <div className={styles.section}>
-            <SectionTitle icon={<IconAI />} title="Comentarios de la IA" />
-            <div className={styles.aiBox}>
-              <p className={styles.aiText}>{tp.comentariosIA}</p>
-            </div>
-          </div>
-
-          {/* 3. Errores */}
-          <div className={styles.section}>
-            <SectionTitle
-              icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>}
-              title={`Errores encontrados${tp.errores?.length ? ` (${tp.errores.length})` : ''}`}
+        <div className="drawer-body" role="tabpanel" aria-labelledby={`tp-tab-${TABS[tab].id}`}>
+          {tab === 0 && <EvaluacionTab tp={tp} />}
+          {tab === 1 && <DocumentoTab tp={tp} />}
+          {tab === 2 && (
+            <DecisionTab
+              nota={nota}
+              setNota={setNota}
+              sugerida={sugerida}
+              observaciones={observaciones}
+              setObservaciones={setObservaciones}
             />
-            {tp.errores?.length > 0 ? (
-              <ul className={styles.itemList}>
-                {tp.errores.map((err, i) => (
-                  <li key={i} className={styles.listItem}>
-                    <IconError />
-                    <span>{err}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className={styles.emptyList}>No se encontraron errores.</p>
-            )}
-          </div>
-
-          {/* 4. Fortalezas */}
-          <div className={styles.section}>
-            <SectionTitle
-              icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>}
-              title={`Fortalezas detectadas${tp.fortalezas?.length ? ` (${tp.fortalezas.length})` : ''}`}
-            />
-            {tp.fortalezas?.length > 0 ? (
-              <ul className={styles.itemList}>
-                {tp.fortalezas.map((f, i) => (
-                  <li key={i} className={styles.listItem}>
-                    <IconCheck />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className={styles.emptyList}>No se detectaron fortalezas.</p>
-            )}
-          </div>
-
-          {/* 5. Recomendaciones */}
-          {tp.recomendaciones?.length > 0 && (
-            <div className={styles.section}>
-              <SectionTitle
-                icon={<IconTip />}
-                title={`Recomendaciones de mejora (${tp.recomendaciones.length})`}
-              />
-              <ul className={styles.itemList}>
-                {tp.recomendaciones.map((r, i) => (
-                  <li key={i} className={styles.listItem}>
-                    <IconTip />
-                    <span>{r}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
           )}
-
-          {/* 6. Nota sugerida */}
-          <div className={styles.section}>
-            <SectionTitle icon={<IconNote />} title="Nota sugerida" />
-            <div className={styles.notaRow}>
-              <input
-                id="nota-sugerida-input"
-                type="number"
-                min="0"
-                max="10"
-                className={styles.notaInput}
-                value={nota}
-                onChange={handleNotaChange}
-              />
-              <span className={styles.notaLabel}>/ 10</span>
-              <span className={styles.notaRange}>Podés modificar la nota antes de guardar</span>
-            </div>
-          </div>
-
-          {/* 7. Observaciones */}
-          <div className={styles.section}>
-            <SectionTitle icon={<IconObs />} title="Observaciones de la docente" />
-            <textarea
-              id="observaciones-docente"
-              className={styles.textarea}
-              placeholder="Agregá observaciones o comentarios para el/la estudiante..."
-              value={observaciones}
-              onChange={(e) => setObservaciones(e.target.value)}
-            />
-          </div>
-
         </div>
 
         {/* ── Fixed footer ── */}
-        <div className={styles.footer}>
-          <button
-            id="drawer-btn-rechazar"
-            className={styles.btnReject}
-            onClick={() => handleAction('Rechazar')}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-            Rechazar
-          </button>
-          <button
-            id="drawer-btn-guardar"
-            className={styles.btnSave}
-            onClick={() => handleAction('Guardar')}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-              <polyline points="17 21 17 13 7 13 7 21" />
-              <polyline points="7 3 7 8 15 8" />
-            </svg>
-            Guardar
-          </button>
-          <button
-            id="drawer-btn-aceptar"
-            className={styles.btnAccept}
-            onClick={() => handleAction('Aceptar corrección')}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            Aceptar corrección
-          </button>
+        <div className="drawer-footer">
+          {isLast ? (
+            <>
+              <button id="drawer-btn-rechazar" className="btn btn-danger" onClick={() => handleAction('rechazar')}>
+                Rechazar
+              </button>
+              <span className="spacer" />
+              <button id="drawer-btn-guardar" className="btn btn-secondary" onClick={() => handleAction('guardar')}>
+                Guardar borrador
+              </button>
+              <button id="drawer-btn-aceptar" className="btn btn-primary" onClick={() => handleAction('aceptar')}>
+                <Icon name="check" strokeWidth={2.25} />
+                Aceptar corrección
+              </button>
+            </>
+          ) : (
+            <>
+              <span className={`${styles.stepInfo} num`}>
+                {pad(tab + 1)} / {pad(TABS.length)} · {TABS[tab].label}
+              </span>
+              <span className="spacer" />
+              <button className="btn btn-secondary" onClick={() => setTab(tab + 1)}>
+                <Icon name="arrowRight" className={styles.iconViolet} />
+                {tab === 0 ? 'Ver documento' : 'Ir a tu decisión'}
+              </button>
+            </>
+          )}
         </div>
       </aside>
     </>

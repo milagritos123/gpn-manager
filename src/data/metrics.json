@@ -3,45 +3,30 @@
     "id": "tp-pendientes",
     "title": "TP Pendientes",
     "value": 12,
-    "subtitle": "Esperando revisión",
-    "iconBg": "#EDE9FE",
-    "iconColor": "#7C3AED",
-    "icon": "clock"
+    "subtitle": "Esperando revisión"
   },
   {
     "id": "tp-corregidos",
     "title": "TP Corregidos",
     "value": 47,
-    "subtitle": "Este semestre",
-    "iconBg": "#ECFDF5",
-    "iconColor": "#10B981",
-    "icon": "check"
+    "subtitle": "Este semestre"
   },
   {
     "id": "tfi-analizados",
     "title": "TFI Analizados",
     "value": 23,
-    "subtitle": "Detección de plagio",
-    "iconBg": "#1F2937",
-    "iconColor": "#FFFFFF",
-    "icon": "file"
+    "subtitle": "Detección de plagio"
   },
   {
     "id": "casos-plagio",
     "title": "Casos de Plagio",
     "value": 3,
-    "subtitle": "Requieren atención",
-    "iconBg": "#FEF2F2",
-    "iconColor": "#EF4444",
-    "icon": "alert"
+    "subtitle": "Requieren atención"
   },
   {
     "id": "recursos-cargados",
     "title": "Recursos Cargados",
     "value": 34,
-    "subtitle": "Base de conocimiento",
-    "iconBg": "#FEF3C7",
-    "iconColor": "#D97706",
-    "icon": "book"
+    "subtitle": "Base de conocimiento"
   }
 ]

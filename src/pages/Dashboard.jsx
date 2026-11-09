@@ -1,37 +1,32 @@
 import DashboardHeader from '../components/dashboard/DashboardHeader'
-import MetricCard from '../components/dashboard/MetricCard'
+import KpiStrip from '../components/dashboard/KpiStrip'
 import BarChart from '../components/dashboard/BarChart'
-import ActivityPanel from '../components/dashboard/ActivityPanel'
+import RecentWorks from '../components/dashboard/RecentWorks'
+import RecentPlagio from '../components/dashboard/RecentPlagio'
 import metricsData from '../data/metrics.json'
 import userData from '../data/user.json'
+import trabajosData from '../data/trabajosGrupales.json'
+import historialData from '../data/historialPlagio.json'
 import styles from './Dashboard.module.css'
+
+const metrics = Object.fromEntries(metricsData.map((m) => [m.id, m.value]))
 
 function Dashboard({ onNavigate }) {
   return (
-    <div className={styles.page}>
-      {/* Welcome header */}
+    <div className="page">
       <DashboardHeader user={userData} />
 
-      {/* Metric Cards */}
-      <div className={styles.metricsGrid}>
-        {metricsData.map((metric) => (
-          <MetricCard
-            key={metric.id}
-            title={metric.title}
-            value={metric.value}
-            subtitle={metric.subtitle}
-            iconBg={metric.iconBg}
-            iconColor={metric.iconColor}
-            icon={metric.icon}
-          />
-        ))}
+      {/* 1. Métricas del cuatrimestre */}
+      <KpiStrip metrics={metrics} onNavigate={onNavigate} />
+
+      {/* 2. Distribución de calificaciones + trabajos recientes */}
+      <div className={styles.row}>
+        <BarChart onNavigate={onNavigate} />
+        <RecentWorks trabajos={trabajosData.slice(0, 5)} onNavigate={onNavigate} />
       </div>
 
-      {/* Chart + Activity */}
-      <div className={styles.bottomGrid}>
-        <BarChart />
-        <ActivityPanel onNavigate={onNavigate} />
-      </div>
+      {/* 3. Últimos análisis de plagio */}
+      <RecentPlagio analisis={historialData.slice(0, 4)} onNavigate={onNavigate} />
     </div>
   )
 }

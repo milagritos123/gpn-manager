@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Layout from './components/layout/Layout'
@@ -7,23 +7,36 @@ import CorreccionTP from './pages/CorreccionTP'
 import DeteccionPlagio from './pages/DeteccionPlagio'
 import GestionAlumnos from './pages/GestionAlumnos'
 import AsistenteInteligente from './pages/AsistenteInteligente'
-import { useEffect } from 'react'
+import { ToastProvider } from './components/ui/Toast'
 
 // Pages that manage their own full height (no inner scroll needed)
-const FULL_HEIGHT_PAGES = ['dashboard', 'correccion', 'alumnos', 'asistente']
+const FULL_HEIGHT_PAGES = ['correccion', 'alumnos', 'asistente']
 
 function AppShell() {
   const [activePage, setActivePage] = useState('dashboard')
+  // Filtros iniciales que una sección puede recibir al navegar (ej. desde el dashboard)
+  const [navParams, setNavParams] = useState(null)
   const [conversations, setConversations] = useState(() => {
-    const saved = localStorage.getItem('gpn_conversations')
-    return saved ? JSON.parse(saved) : []
+    try {
+      const saved = localStorage.getItem('gpn_conversations')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
   })
 
   useEffect(() => {
-    localStorage.setItem('gpn_conversations', JSON.stringify(conversations))
+    try {
+      localStorage.setItem('gpn_conversations', JSON.stringify(conversations))
+    } catch { /* almacenamiento no disponible */ }
   }, [conversations])
 
   const [activeConversationId, setActiveConversationId] = useState(null)
+
+  const handleNavigate = (page, params = null) => {
+    setActivePage(page)
+    setNavParams(params)
+  }
 
   const handleUpdateConversationMessages = (id, messages, title) => {
     setConversations(prev => {
@@ -43,33 +56,37 @@ function AppShell() {
     setActiveConversationId(null)
   }
 
+  // Borra una conversación; si era la abierta, vuelve a la bienvenida
+  const handleDeleteConversation = (id) => {
+    setConversations(prev => prev.filter(c => c.id !== id))
+    if (activeConversationId === id) setActiveConversationId(null)
+  }
+
   const renderPage = () => {
     switch (activePage) {
-      case 'dashboard': return <Dashboard onNavigate={setActivePage} />
-      case 'correccion': return <CorreccionTP />
+      case 'dashboard': return <Dashboard onNavigate={handleNavigate} />
+      case 'correccion': return <CorreccionTP key={JSON.stringify(navParams)} initialFilters={navParams} />
       case 'plagio': return <DeteccionPlagio />
-      case 'alumnos': return <GestionAlumnos />
+      case 'alumnos': return <GestionAlumnos key={JSON.stringify(navParams)} initialFilters={navParams} />
       case 'asistente': return (
         <AsistenteInteligente
           conversations={conversations}
           activeConversationId={activeConversationId}
           onUpdateConversationMessages={handleUpdateConversationMessages}
           onCreateConversation={handleCreateConversation}
+          onSelectConversation={setActiveConversationId}
+          onDeleteConversation={handleDeleteConversation}
         />
       )
-      default: return <Dashboard />
+      default: return <Dashboard onNavigate={handleNavigate} />
     }
   }
 
   return (
     <Layout
       activePage={activePage}
-      onNavigate={setActivePage}
+      onNavigate={handleNavigate}
       fullHeight={FULL_HEIGHT_PAGES.includes(activePage)}
-      conversations={conversations}
-      activeConversationId={activeConversationId}
-      onSelectConversation={setActiveConversationId}
-      onCreateConversation={handleCreateConversation}
     >
       {renderPage()}
     </Layout>
@@ -83,7 +100,7 @@ function App() {
       <Route path="/" element={<Login />} />
 
       {/* Main app behind login */}
-      <Route path="/app/*" element={<AppShell />} />
+      <Route path="/app/*" element={<ToastProvider><AppShell /></ToastProvider>} />
 
       {/* Catch-all → login */}
       <Route path="*" element={<Navigate to="/" replace />} />
